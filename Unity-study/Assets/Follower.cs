@@ -13,9 +13,4 @@ public class Follower : MonoBehaviour
         transform.SetParent(target);
         transform.SetLocalPositionAndRotation(interval, transform.rotation);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
 }
