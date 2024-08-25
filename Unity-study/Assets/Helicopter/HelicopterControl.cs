@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HelicopterControl : MonoBehaviour
@@ -20,12 +21,13 @@ public class HelicopterControl : MonoBehaviour
 
     [SerializeField] private Transform propellerTransform;
     [SerializeField] private float propellerRotatePerSecond = 0f;
-    [SerializeField] private float maxRPS = 2f;
-    [SerializeField] private float propellerRPS_Acceleration = 0.5f;
+    [SerializeField] private float maxRPS = 10f;
+    [SerializeField] private float propellerRPS_Acceleration = 1f;
+    [SerializeField] private float fuel = 30f;
 
     [Header("상승하강")]
 
-    [SerializeField] private float takeoffRPS = 1f;
+    [SerializeField] private float takeoffRPS = 5f;
     [SerializeField] private float ascendingSpeedPerRPS = 2f;
     [SerializeField] private float maxAscending = 10f;
     [SerializeField] private float minAscending = -10f;
@@ -35,13 +37,42 @@ public class HelicopterControl : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotationSpeed = 45f;
 
+    [Header("미사일")]
+
+    
+    [SerializeField] private GameObject missleOrigine;
+    [SerializeField] private float shootCoolDown = 1f;
+    [SerializeField] private bool shootWhileFlyingOnly = false;
+
+    private float coolDownProgress = 0f;
+    private GameObject[] missles = new GameObject[4];
+    private int nextShoot = 0;
+
+    private void Start()
+    {
+        if (missleOrigine.GetComponent<Missile>() is null)
+            Debug.LogError("missleOrigine에 설정된 오브젝트가 Missile을 갖고있지 않습니다.");
+
+        for (int i = 0; i < missles.Length; i++)
+        {
+            missles[i] = Instantiate(missleOrigine);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+        UpdateMovement();
+        ShootCheck();
+    }
+
+    private void UpdateMovement()
+    {
         // 프로펠러 회전속도 갱신
-        if (Input.GetButton("Jump"))
+        if (Input.GetButton("Jump") && (fuel > 0f))
         {
             PropellerRotatePerSecond += propellerRPS_Acceleration * Time.deltaTime;
+            fuel -= Time.deltaTime;
         }
         else
         {
@@ -79,4 +110,23 @@ public class HelicopterControl : MonoBehaviour
         transform.Rotate(Vector3.up, horizontal * Time.deltaTime);
     }
 
+    private void ShootCheck()
+    {
+        coolDownProgress -= Time.deltaTime;
+
+        if (shootWhileFlyingOnly && transform.position.y <= 0f)
+            return;
+
+        if (false == Input.GetButton("Fire3")
+            || coolDownProgress > 0f
+            || missles[nextShoot].activeSelf)
+            return;
+
+        coolDownProgress = shootCoolDown;
+
+        missles[nextShoot].GetComponent<Missile>().ShootSetting(20f, transform.position, transform.rotation);
+        nextShoot++;
+        if (nextShoot >= 4)
+            nextShoot = 0;
+    }
 }
