@@ -12,16 +12,24 @@ public class Shooter : MonoBehaviour
 
     void Start()
     {
+        // 게임 상태 구독
+        GameManager gm = GameObject.FindWithTag("GameController")?.GetComponent<GameManager>();
+        if (gm == null)
+            Debug.LogError("GameManager가 존재하지 않음");
+        gm.OnGameStateChanged += WhenGameStateChanged;
+        WhenGameStateChanged(gm.State); // 최초 1회 현재 상태에 따른 설정 필요
+
+        // 발사 정보 초기화
         remainShootTime = shootPeriod;
         if (muzzle == null)
             muzzle = transform; //인스펙터에서 총구 위치가 설정되지 않았을 경우 자신의 위치
 
+        // 타겟 설정
         target = GameObject.FindWithTag("Player")?.transform;
         if (target == null)
             Debug.LogError("Player가 존재하지 않음");
     }
 
-    // Update is called once per frame
     void Update()
     {
         remainShootTime -= Time.deltaTime;
@@ -31,6 +39,22 @@ public class Shooter : MonoBehaviour
             Shoot();
 
             remainShootTime += shootPeriod;
+        }
+    }
+
+    void WhenGameStateChanged(GameManager.GameState state)
+    {
+        switch (state)
+        {
+            case GameManager.GameState.Ready:
+            case GameManager.GameState.GameOver:
+                this.enabled = false;
+                break;
+            case GameManager.GameState.Running:
+                this.enabled = true;
+                break;
+            default:
+                break;
         }
     }
 

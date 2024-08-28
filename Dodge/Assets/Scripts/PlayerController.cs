@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Bullet"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
             Debug.Log("피격 확인");
         }
