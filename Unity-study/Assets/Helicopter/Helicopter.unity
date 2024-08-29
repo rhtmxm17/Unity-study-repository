@@ -948,7 +948,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 666954336}
-  interval: {x: 0, y: 5, z: -10}
+  lookAt: {x: 0, y: 2, z: 0}
+  lookFrom: {x: 0, y: 8, z: -15}
 --- !u!1 &968944666
 GameObject:
   m_ObjectHideFlags: 0

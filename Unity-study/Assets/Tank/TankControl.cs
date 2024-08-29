@@ -11,7 +11,7 @@ public class TankControl : MonoBehaviour
     [SerializeField] private float cannonHorizontalSpeed;
     [SerializeField] private float cannonVerticalSpeed;
 
-    private float cannonMaxAngle = 80f;
+    private float cannonMaxAngle = 60f;
     private float cannonCurrentAngle = 10f;
 
     [Header("캐논 초기화")]
@@ -127,7 +127,7 @@ public class TankControl : MonoBehaviour
                 return;
 
             ball.transform.SetPositionAndRotation(muzzlePoint.position, muzzlePoint.rotation);
-            ball.Rigid.AddForce(ball.transform.forward * 5f, ForceMode.Impulse);
+            ball.Rigid.AddForce(ball.transform.forward * 10f, ForceMode.Impulse);
         }
     }
 }

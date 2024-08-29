@@ -1,16 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Follower : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private Vector3 interval;
+    [SerializeField] private Vector3 lookAt = Vector3.zero;
+    [SerializeField] private Vector3 lookFrom;
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.SetParent(target);
-        transform.SetLocalPositionAndRotation(interval, transform.rotation);
+    }
+
+    private void LateUpdate()
+    {
+        Quaternion rotationY = Quaternion.AngleAxis(target.rotation.eulerAngles.y, Vector3.up);
+        Vector3 from = rotationY * lookFrom + target.position;
+        Vector3 at = rotationY * lookAt + target.position;
+
+        transform.position = from;
+        transform.LookAt(at);
     }
 }
