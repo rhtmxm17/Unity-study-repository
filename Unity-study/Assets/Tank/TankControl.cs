@@ -56,8 +56,17 @@ public class TankControl : MonoBehaviour
         if (Input.GetKey(KeyCode.S))
             moveFoward--;
 
-        rigid.velocity = moveFoward * movementSpeed * transform.forward;
+        //// case1: velocity 갱신
+        //// 이동 속도를 강제함, 경사 진입 불가능 및 y값 초기화로 인해 낙하 거의 없음(플라잉 탱크)
+        //rigid.velocity = moveFoward * movementSpeed * transform.forward;
 
+        //// case2: velocity zx평면 갱신
+        //// 경사에서 잘 넘어짐
+        //Vector3 move = moveFoward * movementSpeed * transform.forward;
+        //rigid.velocity = new Vector3(move.x, rigid.velocity.y, move.z);
+
+        // case3: translate 사용
+        transform.Translate(moveFoward * movementSpeed * Time.deltaTime * Vector3.forward, Space.Self);
     }
 
     private void TakeAim()
