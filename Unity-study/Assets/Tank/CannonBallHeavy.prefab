@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5425ed23b4131984a89ad49ba73ccddd, type: 2}
+  - {fileID: 2100000, guid: 53053d8cd980c5e40826b4308c43141b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 3093745057140724464}
   - component: {fileID: -120166792754673393}
   m_Layer: 0
-  m_Name: CannonBall
+  m_Name: CannonBallHeavy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

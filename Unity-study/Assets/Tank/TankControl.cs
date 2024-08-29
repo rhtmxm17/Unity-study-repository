@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TankControl : MonoBehaviour
 {
@@ -18,21 +19,27 @@ public class TankControl : MonoBehaviour
     [SerializeField] private Transform cannonJoint; // 상하 회전 조준
     [SerializeField] private Transform muzzlePoint; // 발사 지점
 
-    [SerializeField] private CannonBall cannonBallPrototype;
+    [SerializeField] private CannonBall[] cannonBallPrototypes;
+    [field:SerializeField] public int Selected { get; private set; }
     
-    private ObjectPool<CannonBall> cannonBallPool;
+    private ObjectPool<CannonBall>[] cannonBallPool;
     private Rigidbody rigid;
 
     void Start()
     {
         rigid = gameObject.GetComponent<Rigidbody>();
-        cannonBallPool = new(cannonBallPrototype, 5, transform);
+        cannonBallPool = new ObjectPool<CannonBall>[cannonBallPrototypes.Length];
+        for (int i = 0; i < cannonBallPrototypes.Length; i++)
+        {
+            cannonBallPool[i] = new(cannonBallPrototypes[i], 5, transform);
+        }
     }
 
     private void Update()
     {
         Movement();
         TakeAim();
+        SelectCannonBall();
         Shoot();
     }
 
@@ -101,11 +108,21 @@ public class TankControl : MonoBehaviour
 
     }
 
+    private void SelectCannonBall()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            Selected = 0;
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            Selected = 1;
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            Selected = 2;
+    }
+
     private void Shoot()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            CannonBall ball = cannonBallPool.PopPool(3f);
+            CannonBall ball = cannonBallPool[Selected].PopPool(3f);
             if (ball == null)
                 return;
 
