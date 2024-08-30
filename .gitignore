@@ -1,2 +1,5 @@
 # Visual Studio cache directory
 .vs/
+
+# 배포시 규정 위반일 수 있는 폴더
+*/_Imports/

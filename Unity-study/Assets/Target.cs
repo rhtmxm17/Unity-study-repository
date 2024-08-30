@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class TankGameTarget : MonoBehaviour
+public class Target : MonoBehaviour
 {
     [field: SerializeField] public int Hp { get; set; } = 3;
-    public event UnityAction<TankGameTarget> OnDie;
+    public event UnityAction<Target> OnDie;
 
     private LayerMask bullets;
 

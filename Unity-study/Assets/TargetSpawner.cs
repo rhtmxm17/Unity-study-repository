@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TargetSpawner : MonoBehaviour
 {
-    [SerializeField] private TankGameTarget protoTarget;
+    [SerializeField] private Target protoTarget;
     [SerializeField] private Vector3[] respawnArea = new Vector3[2]; //Bounds struct
     [SerializeField] private int targetNumber = 10;
 
@@ -21,7 +21,7 @@ public class TargetSpawner : MonoBehaviour
 
         for (int i = 0; i < targetNumber; i++)
         {
-            TankGameTarget instance = Instantiate(protoTarget, GetRespawnPoint(), Random.rotation);
+            Target instance = Instantiate(protoTarget, GetRespawnPoint(), Random.rotation);
             instance.OnDie += target =>
             {
                 target.gameObject.SetActive(false);
@@ -45,7 +45,7 @@ public class TargetSpawner : MonoBehaviour
         );
     }
 
-    private IEnumerator Respawn(TankGameTarget target)
+    private IEnumerator Respawn(Target target)
     {
         yield return wait;
 

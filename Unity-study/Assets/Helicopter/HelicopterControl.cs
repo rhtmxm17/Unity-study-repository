@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HelicopterControl : MonoBehaviour
@@ -39,7 +38,7 @@ public class HelicopterControl : MonoBehaviour
 
     [Header("미사일")]
 
-    
+
     [SerializeField] private GameObject missleOrigine;
     [SerializeField] private float shootCoolDown = 1f;
     [SerializeField] private bool shootWhileFlyingOnly = false;

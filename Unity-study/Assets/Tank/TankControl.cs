@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 public class TankControl : MonoBehaviour
 {
@@ -20,8 +19,8 @@ public class TankControl : MonoBehaviour
     [SerializeField] private Transform muzzlePoint; // 발사 지점
 
     [SerializeField] private CannonBall[] cannonBallPrototypes;
-    [field:SerializeField] public int Selected { get; private set; }
-    
+    [field: SerializeField] public int Selected { get; private set; }
+
     private ObjectPool<CannonBall>[] cannonBallPool;
     private Rigidbody rigid;
 
