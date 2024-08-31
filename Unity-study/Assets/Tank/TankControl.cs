@@ -21,13 +21,13 @@ public class TankControl : MonoBehaviour
     [SerializeField] private CannonBall[] cannonBallPrototypes;
     [field: SerializeField] public int Selected { get; private set; }
 
-    private ObjectPool<CannonBall>[] cannonBallPool;
+    private ObjectPoolOld<CannonBall>[] cannonBallPool;
     private Rigidbody rigid;
 
     void Start()
     {
         rigid = gameObject.GetComponent<Rigidbody>();
-        cannonBallPool = new ObjectPool<CannonBall>[cannonBallPrototypes.Length];
+        cannonBallPool = new ObjectPoolOld<CannonBall>[cannonBallPrototypes.Length];
         for (int i = 0; i < cannonBallPrototypes.Length; i++)
         {
             cannonBallPool[i] = new(cannonBallPrototypes[i], 5, transform);

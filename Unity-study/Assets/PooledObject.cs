@@ -5,7 +5,7 @@ public class PooledObject : MonoBehaviour
 {
     // ObjectPool에서 사용하기 위한 일종의 신분증 + 유틸
 
-    public ObjectPool Pool { get; private set; }
+    public ObjectPoolOld Pool { get; private set; }
     public MonoBehaviour Focus { get; private set; }
 
     private Coroutine reservation;
@@ -25,7 +25,7 @@ public class PooledObject : MonoBehaviour
         reservation = null;
     }
 
-    public PooledObject SetPool(ObjectPool pool)
+    public PooledObject SetPool(ObjectPoolOld pool)
     {
         this.Pool = pool;
         return this;

@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ObjectPool
+public abstract class ObjectPoolOld
 {
     public abstract void ReturnPool(MonoBehaviour item);
 }
 
 [System.Serializable]
-public class ObjectPool<T> : ObjectPool where T : MonoBehaviour
+public class ObjectPoolOld<T> : ObjectPoolOld where T : MonoBehaviour
 {
     [SerializeField] private Stack<MonoBehaviour> pool; // Stack이라선지 인스펙터 창에서 안보임
     [SerializeField] private Transform owner;
 
-    public ObjectPool(T prototype, int size, Transform owner = null)
+    public ObjectPoolOld(T prototype, int size, Transform owner = null)
     {
         this.owner = owner;
         pool = new Stack<MonoBehaviour>(size);
