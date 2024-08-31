@@ -6,7 +6,6 @@ public class PooledObject : MonoBehaviour
     // ObjectPool에서 사용하기 위한 일종의 신분증 + 유틸
 
     public ObjectPoolOld Pool { get; private set; }
-    public MonoBehaviour Focus { get; private set; }
 
     private Coroutine reservation;
 
@@ -21,7 +20,7 @@ public class PooledObject : MonoBehaviour
     private IEnumerator ReturnRoutine(float Time)
     {
         yield return new WaitForSeconds(Time);
-        Pool.ReturnPool(Focus);
+        ReturnPool();
         reservation = null;
     }
 
@@ -31,12 +30,8 @@ public class PooledObject : MonoBehaviour
         return this;
     }
 
-    public PooledObject SetFocus(MonoBehaviour focus)
-    {
-        this.Focus = focus;
-        return this;
-    }
-
+    public void ReturnPool() => Pool.ReturnPool(this.gameObject);
+    
     private void OnDisable()
     {
         if (reservation != null)

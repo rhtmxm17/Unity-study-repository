@@ -498,9 +498,9 @@ MonoBehaviour:
   cannonJoint: {fileID: 1332851433156219405}
   muzzlePoint: {fileID: 4956761484839016422}
   cannonBallPrototypes:
-  - {fileID: 3093745057140724464, guid: 86a14b22c4f94914e9e6e94979a7dfe6, type: 3}
-  - {fileID: 3093745057140724464, guid: 59dcd4476bde3d24d89a1feddb547a1a, type: 3}
-  - {fileID: 3093745057140724464, guid: ec3ab12aa86b19c4787b263ec8312744, type: 3}
+  - {fileID: 3009250930308948576, guid: 86a14b22c4f94914e9e6e94979a7dfe6, type: 3}
+  - {fileID: 4047273690646587665, guid: 59dcd4476bde3d24d89a1feddb547a1a, type: 3}
+  - {fileID: 5797989081570921810, guid: ec3ab12aa86b19c4787b263ec8312744, type: 3}
   <Selected>k__BackingField: 0
 --- !u!1 &8941122077803704593
 GameObject:

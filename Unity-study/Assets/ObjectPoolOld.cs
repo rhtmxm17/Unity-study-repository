@@ -1,52 +1,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ObjectPoolOld
-{
-    public abstract void ReturnPool(MonoBehaviour item);
-}
-
 [System.Serializable]
-public class ObjectPoolOld<T> : ObjectPoolOld where T : MonoBehaviour
+public class ObjectPoolOld
 {
-    [SerializeField] private Stack<MonoBehaviour> pool; // Stack이라선지 인스펙터 창에서 안보임
+    [SerializeField] private Stack<GameObject> pool; // Stack이라선지 인스펙터 창에서 안보임
     [SerializeField] private Transform owner;
 
-    public ObjectPoolOld(T prototype, int size, Transform owner = null)
+    public ObjectPoolOld(PooledObject prototype, int size, Transform owner = null)
     {
         this.owner = owner;
-        pool = new Stack<MonoBehaviour>(size);
+        pool = new Stack<GameObject>(size);
         for (int i = 0; i < size; ++i)
         {
-            T clone = MonoBehaviour.Instantiate(prototype);
-            PooledObject poolinfo = clone.gameObject.AddComponent<PooledObject>();
-            poolinfo.SetPool(this).SetFocus(clone);
+            PooledObject clone = MonoBehaviour.Instantiate(prototype);
+            clone.SetPool(this);
             clone.gameObject.SetActive(false);
             clone.transform.parent = owner;
-            pool.Push(clone);
+            pool.Push(clone.gameObject);
         }
     }
 
-    public T PopPool()
+    public GameObject PopPool()
     {
-        pool.TryPop(out MonoBehaviour pop);
+        pool.TryPop(out GameObject pop);
         pop.transform.SetParent(null);
-        pop.gameObject.SetActive(true);
-        return (T)pop;
+        pop.SetActive(true);
+        return pop;
     }
 
-    public T PopPool(float lifeTime)
+    public GameObject PopPool(float lifeTime)
     {
-        pool.TryPop(out MonoBehaviour pop);
+        pool.TryPop(out GameObject pop);
         if (pop == null)
             return null;
         pop.transform.SetParent(null);
         pop.gameObject.SetActive(true);
         pop.GetComponent<PooledObject>().ReturnReservation(lifeTime);
-        return (T)pop;
+        return pop;
     }
 
-    public override void ReturnPool(MonoBehaviour item)
+    public void ReturnPool(GameObject item)
     {
         if (this != item.GetComponent<PooledObject>().Pool)
             Debug.LogError("다른 풀에서 생성된 오브젝트가 반환됨");

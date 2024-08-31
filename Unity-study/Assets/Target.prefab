@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8383679045551880256}
   - component: {fileID: 2861956958931284078}
   - component: {fileID: 7609360558999750423}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 7166827149121407035}
   - component: {fileID: 7166827149121407034}
   - component: {fileID: -2024874768536062798}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8669d2e7247ef5e44935c38b80125949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 3
+  <Hp>k__BackingField: 3
 --- !u!54 &-2024874768536062798
 Rigidbody:
   m_ObjectHideFlags: 0

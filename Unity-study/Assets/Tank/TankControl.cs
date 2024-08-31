@@ -18,16 +18,16 @@ public class TankControl : MonoBehaviour
     [SerializeField] private Transform cannonJoint; // 상하 회전 조준
     [SerializeField] private Transform muzzlePoint; // 발사 지점
 
-    [SerializeField] private CannonBall[] cannonBallPrototypes;
+    [SerializeField] private PooledObject[] cannonBallPrototypes;
     [field: SerializeField] public int Selected { get; private set; }
 
-    private ObjectPoolOld<CannonBall>[] cannonBallPool;
+    private ObjectPoolOld[] cannonBallPool;
     private Rigidbody rigid;
 
     void Start()
     {
         rigid = gameObject.GetComponent<Rigidbody>();
-        cannonBallPool = new ObjectPoolOld<CannonBall>[cannonBallPrototypes.Length];
+        cannonBallPool = new ObjectPoolOld[cannonBallPrototypes.Length];
         for (int i = 0; i < cannonBallPrototypes.Length; i++)
         {
             cannonBallPool[i] = new(cannonBallPrototypes[i], 5, transform);
@@ -121,7 +121,7 @@ public class TankControl : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            CannonBall ball = cannonBallPool[Selected].PopPool(3f);
+            CannonBall ball = cannonBallPool[Selected].PopPool(3f)?.GetComponent<CannonBall>();
             if (ball == null)
                 return;
 
