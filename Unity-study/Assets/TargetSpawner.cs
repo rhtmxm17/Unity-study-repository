@@ -49,9 +49,9 @@ public class TargetSpawner : MonoBehaviour
     {
         yield return wait;
 
+        target.ResetStatus();
         target.gameObject.SetActive(true);
         target.transform.SetPositionAndRotation(GetRespawnPoint(), Random.rotation);
-        target.Hp = 3;
     }
 
 }
