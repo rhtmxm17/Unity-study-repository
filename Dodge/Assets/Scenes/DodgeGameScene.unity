@@ -976,9 +976,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9901831230d2b6b429472fb18f257839, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
-  uiReady: {fileID: 517068069}
-  uiGameOver: {fileID: 275211148}
+  OnGameStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  state: 1
 --- !u!4 &1014589268
 Transform:
   m_ObjectHideFlags: 0

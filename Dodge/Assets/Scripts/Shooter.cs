@@ -13,11 +13,8 @@ public class Shooter : MonoBehaviour
     void Start()
     {
         // 게임 상태 구독
-        GameManager gm = GameObject.FindWithTag("GameController")?.GetComponent<GameManager>();
-        if (gm == null)
-            Debug.LogError("GameManager가 존재하지 않음");
-        gm.OnGameStateChanged += WhenGameStateChanged;
-        WhenGameStateChanged(gm.State); // 최초 1회 현재 상태에 따른 설정 필요
+        GameManager.Instance.OnGameStateChanged.AddListener(WhenGameStateChanged);
+        WhenGameStateChanged(GameManager.Instance.State); // 최초 1회 현재 상태에 따른 설정 필요
 
         // 발사 정보 초기화
         remainShootTime = shootPeriod;

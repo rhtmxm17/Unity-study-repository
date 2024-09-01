@@ -1,15 +1,30 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                Debug.LogWarning("GameManager가 강제로 생성됨");
+                GameObject emptyGameManager = new GameObject("GameManager");
+                instance = emptyGameManager.AddComponent<GameManager>();
+            }
+
+            return instance;
+        }
+    }
+
     public enum GameState { None, Ready, Running, GameOver };
 
+    public UnityEvent<GameState> OnGameStateChanged;
+
     [SerializeField] private GameState state;
-    [SerializeField] private Text uiReady;
-    [SerializeField] private Text uiGameOver;
 
     public GameState State
     {
@@ -21,17 +36,20 @@ public class GameManager : MonoBehaviour
 
             state = value;
             OnGameStateChanged?.Invoke(state);
-
-            uiReady.gameObject.SetActive(state == GameState.Ready);
-            uiGameOver.gameObject.SetActive(state == GameState.GameOver);
         }
     }
 
-    public event UnityAction<GameState> OnGameStateChanged;
 
     private void Awake()
     {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
         State = GameState.Ready;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()
@@ -51,6 +69,7 @@ public class GameManager : MonoBehaviour
                     if (Input.GetButtonDown("Jump"))
                     {
                         SceneManager.LoadScene("DodgeGameScene");
+                        State = GameState.Ready;
                     }
                 }
                 break;
