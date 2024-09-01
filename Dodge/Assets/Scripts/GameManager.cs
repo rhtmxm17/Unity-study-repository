@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    // 싱글턴
     private static GameManager instance;
     public static GameManager Instance
     {
@@ -20,11 +21,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 게임 상태
     public enum GameState { None, Ready, Running, GameOver };
 
-    public UnityEvent<GameState> OnGameStateChanged;
+    public event UnityAction<GameState> OnGameStateChanged;
 
     [SerializeField] private GameState state;
+
+    // 스코어 관련
+    public float StageStartTime { get; private set; }
 
     public GameState State
     {
@@ -59,7 +64,10 @@ public class GameManager : MonoBehaviour
             case GameState.Ready:
                 {
                     if (Input.anyKeyDown)
+                    {
                         State = GameState.Running;
+                        StageStartTime = Time.time;
+                    }
                 }
                 break;
             case GameState.Running:
@@ -74,5 +82,13 @@ public class GameManager : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (OnGameStateChanged == null)
+            Debug.Log("delegate가 정상적으로 비어있음");
+        else
+            Debug.Log($"delegate가 남아있음: {OnGameStateChanged.GetInvocationList()}");
     }
 }

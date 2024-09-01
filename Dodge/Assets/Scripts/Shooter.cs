@@ -13,7 +13,7 @@ public class Shooter : MonoBehaviour
     void Start()
     {
         // 게임 상태 구독
-        GameManager.Instance.OnGameStateChanged.AddListener(WhenGameStateChanged);
+        GameManager.Instance.OnGameStateChanged += WhenGameStateChanged;
         WhenGameStateChanged(GameManager.Instance.State); // 최초 1회 현재 상태에 따른 설정 필요
 
         // 발사 정보 초기화
@@ -39,6 +39,11 @@ public class Shooter : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnGameStateChanged -= WhenGameStateChanged;
+    }
+
     void WhenGameStateChanged(GameManager.GameState state)
     {
         switch (state)
@@ -60,4 +65,5 @@ public class Shooter : MonoBehaviour
         Bullet bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
         bullet.Shoot(target);
     }
+
 }
