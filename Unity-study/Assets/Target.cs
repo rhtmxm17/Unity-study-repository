@@ -13,7 +13,7 @@ public class Target : MonoBehaviour
         bulletLayer = LayerMask.NameToLayer("Bullet");
         OnDie += target =>
         {
-            Debug.Log("hp zero");
+            Debug.Log("표적 hp 소진");
         };
     }
 
