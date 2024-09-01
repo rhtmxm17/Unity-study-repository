@@ -1,8 +1,10 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FPS_PlayerControl : MonoBehaviour
 {
+    public UnityEvent<int> OnLoadedBulletChanged;
 
     [SerializeField] private Transform head;
     [SerializeField] private Transform muzzle;
@@ -23,6 +25,15 @@ public class FPS_PlayerControl : MonoBehaviour
     private Coroutine reloadRoutine;
 
     private int loaded;
+    public int Loaded
+    {
+        get => loaded;
+        private set
+        {
+            loaded = value;
+            OnLoadedBulletChanged?.Invoke(loaded);
+        }
+    }
 
     private void Awake()
     {
@@ -30,7 +41,7 @@ public class FPS_PlayerControl : MonoBehaviour
         hitableMask = MyUtil.maskMonster | MyUtil.maskDefault;
         waitFire = new(secondsPerFire);
         waitReload = new(reloadTime);
-        loaded = magazineSize;
+        Loaded = magazineSize;
     }
 
     private void Start()
@@ -100,7 +111,7 @@ public class FPS_PlayerControl : MonoBehaviour
     private IEnumerator StartFire()
     {
         fireState = FireState.Shooting;
-        while (loaded > 0)
+        while (Loaded > 0)
         {
             Fire();
             yield return waitFire;
@@ -116,13 +127,13 @@ public class FPS_PlayerControl : MonoBehaviour
     {
         fireState = FireState.Reloading;
         yield return waitReload;
-        loaded = magazineSize;
+        Loaded = magazineSize;
         fireState = FireState.Idle;
     }
 
     private void Fire()
     {
-        loaded--;
+        Loaded--;
         Debug.Log("발사");
 
         if (Physics.Raycast(muzzle.position, muzzle.forward, out RaycastHit info, 100f, hitableMask))
