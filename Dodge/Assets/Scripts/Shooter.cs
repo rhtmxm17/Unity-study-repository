@@ -10,7 +10,7 @@ public class Shooter : MonoBehaviour
 
     private Transform target;
 
-    void Start()
+    private void Start()
     {
         // 게임 상태 구독
         GameManager.Instance.OnGameStateChanged += WhenGameStateChanged;
@@ -27,7 +27,7 @@ public class Shooter : MonoBehaviour
             Debug.LogError("Player가 존재하지 않음");
     }
 
-    void Update()
+    private void Update()
     {
         remainShootTime -= Time.deltaTime;
 
@@ -44,12 +44,13 @@ public class Shooter : MonoBehaviour
         GameManager.Instance.OnGameStateChanged -= WhenGameStateChanged;
     }
 
-    void WhenGameStateChanged(GameManager.GameState state)
+    private void WhenGameStateChanged(GameManager.GameState state)
     {
         switch (state)
         {
             case GameManager.GameState.Ready:
             case GameManager.GameState.GameOver:
+            case GameManager.GameState.Win:
                 this.enabled = false;
                 break;
             case GameManager.GameState.Running:
@@ -60,7 +61,7 @@ public class Shooter : MonoBehaviour
         }
     }
 
-    void Shoot()
+    private void Shoot()
     {
         Bullet bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
         bullet.Shoot(target);

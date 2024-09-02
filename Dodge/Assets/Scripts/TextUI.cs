@@ -24,10 +24,13 @@ public class TextUI : MonoBehaviour
         switch (state)
         {
             case GameManager.GameState.Ready:
-                text.text = "Press Any Key";
+                text.text = "아무 키나 눌러서 시작";
                 break;
             case GameManager.GameState.GameOver:
-                text.text = "Game Over\nPress Space for Restart";
+                text.text = "게임 오버\n스페이스바를 눌러서 다시 시작";
+                break;
+            case GameManager.GameState.Win:
+                text.text = $"클리어!\n현재 점수: {GameManager.Instance.CurrentScore}\n최고 점수: {GameManager.Instance.BestScore}\n스페이스바를 눌러서 다시 시작";
                 break;
             default:
                 text.text = string.Empty;

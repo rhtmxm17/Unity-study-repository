@@ -41,11 +41,11 @@ public class FPS_PlayerControl : MonoBehaviour
         hitableMask = MyUtil.maskMonster | MyUtil.maskDefault;
         waitFire = new(secondsPerFire);
         waitReload = new(reloadTime);
-        Loaded = magazineSize;
     }
 
     private void Start()
     {
+        Loaded = magazineSize;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }

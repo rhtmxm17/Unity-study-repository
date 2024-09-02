@@ -31,6 +31,7 @@ public class StopwatchUI : MonoBehaviour
                 updateStopwatch = StartCoroutine(Stopwatch());
                 break;
             case GameManager.GameState.GameOver:
+            case GameManager.GameState.Win:
                 if (updateStopwatch != null)
                 {
                     StopCoroutine(updateStopwatch);

@@ -37,14 +37,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
+        if (GameManager.Instance.State == GameManager.GameState.Running
+                && collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
             Debug.Log("피격 확인");
             rigid.constraints = RigidbodyConstraints.None;
             this.enabled = false;
 
-            GameManager gm = GameObject.FindWithTag("GameController")?.GetComponent<GameManager>();
-            gm.State = GameManager.GameState.GameOver;
+            GameManager.Instance.State = GameManager.GameState.GameOver;
         }
 
     }
