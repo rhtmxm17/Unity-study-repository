@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ThirdPersonCamera : MonoBehaviour
@@ -16,20 +17,50 @@ public class ThirdPersonCamera : MonoBehaviour
     private float horizontalAngleCur = 0f;
     private float verticalAngleCur = 0f;
 
+    private Coroutine rotateRoutine;
+
+    private float targetDistanceMax; // 카메라 레이캐스트용 거리
+    private float targetDistanceCur;
+    [SerializeField] private float lerpCoefficient = 1f;
+    private Vector3 targetDirectionLocal;
+    private LayerMask cameraCastLayer;
+
     private void Awake()
     {
         dotUpMax = Mathf.Sin(Mathf.Deg2Rad * lookupAngleMax);
         dotUpMin = Mathf.Sin(Mathf.Deg2Rad * lookupAngleMin);
+
+        targetDistanceMax = targetInLocal.magnitude;
+        targetDirectionLocal = targetInLocal.normalized;
+        cameraCastLayer = ~LayerMask.GetMask("Player", "Ignore Raycast");
     }
 
     private void Update()
     {
-        float xInput = Input.GetAxis("Mouse X") * sensitivityX;
-        float yInput = Input.GetAxis("Mouse Y") * sensitivityY;
+        // 우클릭 하는 동안만 카메라 회전
+        if (Input.GetMouseButtonDown(1))
+        {
+            rotateRoutine = StartCoroutine(CameraRotation());
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            StopCoroutine(rotateRoutine);
+        }
+    }
 
-        //RotateLockDot(xInput, yInput);
-        //RotateLockSetAndRotate(xInput, yInput);
-        RotateLockSet(xInput, yInput);
+    private IEnumerator CameraRotation()
+    {
+        while (true)
+        {
+            float xInput = Input.GetAxis("Mouse X") * sensitivityX;
+            float yInput = Input.GetAxis("Mouse Y") * sensitivityY;
+
+            //RotateLockDot(xInput, yInput);
+            //RotateLockSetAndRotate(xInput, yInput);
+            RotateLockSet(xInput, yInput);
+
+            yield return null;
+        }
     }
 
     private void RotateLockDot(float xInput, float yInput)
@@ -88,7 +119,14 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        Vector3 from = target.position - transform.rotation * targetInLocal;
-        transform.position = from;
+        Vector3 gap = -(transform.rotation * targetInLocal);
+
+        float lerpTo = targetDistanceMax;
+        if (Physics.Raycast(target.position, gap, out RaycastHit hitInfo, targetDistanceMax, cameraCastLayer))
+        {
+            lerpTo = hitInfo.distance;
+        }
+        targetDistanceCur = Mathf.Lerp(targetDistanceCur, lerpTo, lerpCoefficient * Time.deltaTime);
+        transform.position = target.position - transform.rotation * targetDirectionLocal * targetDistanceCur;
     }
 }
