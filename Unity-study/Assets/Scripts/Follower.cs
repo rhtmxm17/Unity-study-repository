@@ -6,11 +6,6 @@ public class Follower : MonoBehaviour
     [SerializeField] private Vector3 lookAt = Vector3.zero;
     [SerializeField] private Vector3 lookFrom;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
     private void LateUpdate()
     {
         Quaternion rotationY = Quaternion.AngleAxis(target.rotation.eulerAngles.y, Vector3.up);
