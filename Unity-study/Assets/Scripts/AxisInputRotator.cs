@@ -3,6 +3,18 @@ using UnityEngine;
 public class AxisInputRotator : MonoBehaviour
 {
     [SerializeField] private Transform target;
+    [SerializeField, Tooltip("카메라 회전 계수. Inspector에서 수정시 오작동할 수 있음")] private float speedGain = 1f;
+    public float SpeedGain
+    {
+        get => speedGain;
+        set
+        {
+            float gain = value / speedGain;
+            vertical.speed *= gain;
+            horizontal.speed *= gain;
+            speedGain = value;
+        }
+    }
 
     [SerializeField]
     private AxisInfo vertical = new AxisInfo()

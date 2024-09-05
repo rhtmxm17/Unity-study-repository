@@ -62,7 +62,7 @@ public class FPS_FireControl : MonoBehaviour
                 {
                     fireRoutine = StartCoroutine(StartFire());
                 }
-                else if (Input.GetKeyDown(KeyCode.R) || Input.GetButtonDown("Fire2"))
+                else if (Input.GetKeyDown(KeyCode.R))
                 {
                     reloadRoutine = StartCoroutine(Reloading());
                 }
