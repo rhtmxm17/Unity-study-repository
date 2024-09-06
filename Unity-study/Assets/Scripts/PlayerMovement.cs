@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, Tooltip("3차원 이동 여부")] private bool moveY = false;
     [SerializeField] private float rotationDegreesPerSecond = 360f;
 
+    [SerializeField] private Animator animator;
+
     private void Update()
     {
         // 입력
@@ -19,8 +21,12 @@ public class PlayerMovement : MonoBehaviour
         if (false == moveY)
             dir.y = 0f;
         if (dir == Vector3.zero)
+        {
+            animator.SetFloat("Speed", 0f);
             return;
+        }
         dir.Normalize();
+        animator.SetFloat("Speed", movementSpeed);
 
         // 이동
         transform.Translate(movementSpeed * Time.deltaTime * dir, Space.World);
