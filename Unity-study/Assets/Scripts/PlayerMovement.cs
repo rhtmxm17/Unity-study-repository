@@ -8,7 +8,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, Tooltip("3차원 이동 여부")] private bool moveY = false;
     [SerializeField] private float rotationDegreesPerSecond = 360f;
 
-    [SerializeField] private Animator animator;
+    private IMovableModel model;
+
+    private void Awake()
+    {
+        model = GetComponent<IMovableModel>();
+    }
 
     private void Update()
     {
@@ -18,18 +23,16 @@ public class PlayerMovement : MonoBehaviour
 
         // 방향 결정
         Vector3 dir = space.rotation * new Vector3(x, 0, z); // 기준 Transform의 방향으로 변환
+        model.MoveSpeed = movementSpeed * new Vector3(x, 0, z);
         if (false == moveY)
             dir.y = 0f;
         if (dir == Vector3.zero)
         {
-            animator.SetFloat("Speed", 0f);
             return;
         }
         dir.Normalize();
-        animator.SetFloat("Speed", movementSpeed);
-
         // 이동
-        transform.Translate(movementSpeed * Time.deltaTime * dir, Space.World);
+        transform.Translate(Time.deltaTime * movementSpeed * dir, Space.World);
 
         if (body != null)
         {

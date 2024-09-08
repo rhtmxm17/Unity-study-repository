@@ -55,6 +55,13 @@ MonoBehaviour:
   moveY: 0
   rotationDegreesPerSecond: 360
   animator: {fileID: 1687037874}
+  model:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!114 &976619460172002337
 MonoBehaviour:
   m_ObjectHideFlags: 0

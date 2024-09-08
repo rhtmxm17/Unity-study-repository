@@ -12,15 +12,18 @@ public class FPS_FireControl : MonoBehaviour
     [SerializeField] private int magazineSize = 30;
     [SerializeField] private float secondsPerFire = 0.1f;
     [SerializeField] private float reloadTime = 2f;
+    [SerializeField] private FireFlag fireLock;
 
-    private enum FireState { Idle, Shooting, Reloading, };
-    private FireState fireState;
+    [System.Flags]
+    public enum FireFlag
+    {
+        Reloading   = 1 << 0,
+        ExtraLock   = 1 << 2,
+        ZoomLock    = 1 << 3,
 
-    private LayerMask hitableMask;
-    private WaitForSeconds waitFire;
-    private WaitForSeconds waitReload;
-    private Coroutine fireRoutine;
-    private Coroutine reloadRoutine;
+    }
+
+    
 
     private int loaded;
     public int Loaded
@@ -33,9 +36,37 @@ public class FPS_FireControl : MonoBehaviour
         }
     }
 
+    public bool ZoomLock
+    {
+        get => 0 != (fireLock & FireFlag.ZoomLock);
+        set
+        {
+            if (value)
+            {
+                fireLock |= FireFlag.ZoomLock;
+                if (fireRoutine != null)
+                {
+                    StopCoroutine(fireRoutine);
+                    fireRoutine = null;
+                }
+            }
+            else
+            {
+                fireLock &= ~FireFlag.ZoomLock;
+            }
+        }
+    }
+
+    private LayerMask hitableMask;
+    private WaitForSeconds waitFire;
+    private WaitForSeconds waitReload;
+    private Coroutine fireRoutine;
+    private Coroutine reloadRoutine;
+
+
+
     private void Awake()
     {
-        fireState = FireState.Idle;
         hitableMask = MyUtil.maskMonster | MyUtil.maskDefault;
         waitFire = new(secondsPerFire);
         waitReload = new(reloadTime);
@@ -55,46 +86,36 @@ public class FPS_FireControl : MonoBehaviour
 
     private void FireCheck()
     {
-        switch (fireState)
+        if (0 == fireLock)
         {
-            case FireState.Idle:
-                if (Input.GetButtonDown("Fire1"))
-                {
-                    fireRoutine = StartCoroutine(StartFire());
-                }
-                else if (Input.GetKeyDown(KeyCode.R))
-                {
-                    reloadRoutine = StartCoroutine(Reloading());
-                }
-                break;
-            case FireState.Shooting:
-                if (Input.GetButtonUp("Fire1"))
-                {
-                    fireState = FireState.Idle;
-                    StopCoroutine(fireRoutine);
-                    fireRoutine = null;
-                }
-                break;
-            case FireState.Reloading:
-                if (Input.GetButtonDown("Fire1"))
-                    Debug.Log("장전 진행중!");
-                break;
-            default:
-                Debug.LogError("정의되지 않은 발사 상태");
-                break;
+            if (Input.GetButtonDown("Fire1") && fireRoutine == null)
+            {
+                fireRoutine = StartCoroutine(StartFire());
+            }
+            if (Input.GetButtonUp("Fire1") && fireRoutine != null)
+            {
+                StopCoroutine(fireRoutine);
+                fireRoutine = null;
+            }
         }
 
+
+        if (0 == (fireLock & FireFlag.Reloading))
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                reloadRoutine = StartCoroutine(Reloading());
+            }
+        }
     }
 
     private IEnumerator StartFire()
     {
-        fireState = FireState.Shooting;
         while (Loaded > 0)
         {
             Fire();
             yield return waitFire;
         }
-        fireState = FireState.Idle;
         fireRoutine = null;
         EmptyMagazine();
     }
@@ -103,10 +124,10 @@ public class FPS_FireControl : MonoBehaviour
 
     private IEnumerator Reloading()
     {
-        fireState = FireState.Reloading;
+        fireLock |= FireFlag.Reloading;
         yield return waitReload;
         Loaded = magazineSize;
-        fireState = FireState.Idle;
+        fireLock &= ~FireFlag.Reloading;
     }
 
     private void Fire()
@@ -117,7 +138,7 @@ public class FPS_FireControl : MonoBehaviour
         if (Physics.Raycast(muzzle.position, muzzle.forward, out RaycastHit info, 100f, hitableMask))
         {
             // rigidbody가 있다면 충돌지점이 전체 게임오브젝트의 일부인 것으로 보고 rigidbody의 gameObject를 사용
-            GameObject hitted = (info.rigidbody?.gameObject) ?? info.collider.gameObject;
+            GameObject hitted = (info.rigidbody != null) ? info.rigidbody.gameObject : info.collider.gameObject;
 
             if (hitted.layer == MyUtil.layerDefault)
             {
@@ -141,7 +162,7 @@ public class FPS_FireControl : MonoBehaviour
         Gizmos.DrawWireCube(transform.TransformPoint(0f, 0.5f, 0f), Vector3.one);
 
         Gizmos.DrawRay(muzzle.position, muzzle.forward);
-        if (fireState == FireState.Shooting)
+        if (fireRoutine != null)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(muzzle.position, muzzle.position + muzzle.forward * 100f);
