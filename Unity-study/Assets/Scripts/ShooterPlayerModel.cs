@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ShooterPlayerModel : MonoBehaviour, IMovableModel
@@ -16,36 +17,65 @@ public class ShooterPlayerModel : MonoBehaviour, IMovableModel
     [SerializeField] private FPS_FireControl fireControl; // zoom 상태일때만 활성화
     [SerializeField] private TextMeshProUGUI magagineUI;
 
+    public event UnityAction<Vector3> OnMoveSpeedChanged;
+    public event UnityAction<bool> OnZoomChanged;
+    public event UnityAction<int> OnBulletsChanged;
+
     private Coroutine fillImageRoutine;
+
+    private void Awake()
+    {
+        if (animator != null)
+        {
+            OnMoveSpeedChanged += PresentAnimatorMoveSpeed;
+            OnZoomChanged += PresentAnimatorZoom;
+        }
+
+        if (fireControl != null)
+        {
+            OnZoomChanged += PresentFireControlZoom;
+        }
+
+        if (zoomImage != null)
+        {
+            OnZoomChanged += PresentZoomImageZoom;
+        }
+
+        if (magagineUI != null)
+        {
+            OnBulletsChanged += PresentBullet;
+        }
+    }
 
     public Vector3 MoveSpeed
     {
         get => moveSpeed;
-        set { moveSpeed = value; PresentMoveSpeed(); }
+        set { moveSpeed = value; OnMoveSpeedChanged?.Invoke(value); }
     }
 
     public bool Zoom
     {
         get => zoom;
-        set { zoom = value; PresentZoom(); }
+        set { zoom = value; OnZoomChanged?.Invoke(value); }
     }
 
     public int Bullets
     {
         get => bullets;
-        set { bullets = value; PresentBullet(); }
+        set { bullets = value; OnBulletsChanged?.Invoke(value); }
     }
 
-    private void PresentMoveSpeed()
+    private void PresentAnimatorMoveSpeed(Vector3 speed)
     {
-        animator.SetFloat("ZSpeed", moveSpeed.z);
-        animator.SetFloat("XSpeed", moveSpeed.x);
+        animator.SetFloat("ZSpeed", speed.z);
+        animator.SetFloat("XSpeed", speed.x);
     }
 
-    private void PresentZoom()
+    private void PresentAnimatorZoom(bool zoom) => animator.SetBool("Aim", zoom);
+
+    private void PresentFireControlZoom(bool zoom) => fireControl.ZoomLock = !zoom;
+    private void PresentZoomImageZoom(bool zoom)
     {
-        animator.SetBool("Aim", zoom);
-        fireControl.ZoomLock = !zoom;
         if (fillImageRoutine is null)
         {
             fillImageRoutine = StartCoroutine(FillImage());
@@ -72,8 +102,5 @@ public class ShooterPlayerModel : MonoBehaviour, IMovableModel
         fillImageRoutine = null;
     }
 
-    private void PresentBullet()
-    {
-        magagineUI.SetText("{0}/30", bullets);
-    }
+    private void PresentBullet(int bullets) => magagineUI.SetText("{0}/30", bullets);
 }

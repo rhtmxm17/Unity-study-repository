@@ -2,7 +2,7 @@
 
 유니티 공부에 사용한 저장소입니다.
 
-## 헬리콥터([씬 파일](./Unity-study/Assets/Helicopter/Helicopter.unity))
+## 헬리콥터([씬 파일](./Unity-study/Assets/Scenes/Helicopter.unity))
 
 주요 주제: Transform 컴포넌트 스터디
 
@@ -11,13 +11,13 @@
 * 점프 입력: 프로펠러 가속, 임계값보다 빠르면 상승 느리면 하강
 * Fire3 입력: 입력중 미사일 발사
 
-## 행성계([씬 파일](./Unity-study/Assets/Satellite/Satellite.unity))
+## 행성계([씬 파일](./Unity-study/Assets/Scenes/Satellite.unity))
 
 주요 주제: Transform 컴포넌트 스터디(특히 회전)
 
 씬에 배치한 큐브들이 다른 큐브를 대상으로 공전 및 스스로 자전한다.
 
-## 탱크([씬 파일](./Unity-study/Assets/Tank/Tank.unity))
+## 탱크([씬 파일](./Unity-study/Assets/Scenes/Tank.unity))
 
 주요 주제: 프리펩, 오브젝트 풀, RigidBody
 
@@ -30,8 +30,19 @@
 
 ## Dodge 미니게임([프로젝트 폴더](./Dodge/))
 
-주요 주제: Transform, 물리 및 충돌 기초, Laycast 기초 정리
+주요 주제: Transform, 물리 및 충돌 기초, Raycast 기초 정리
 
 * 방향 입력: 플레이어 이동
 
 주위에 배치된 기둥이 발사하는 총알을 피하는 미니게임.
+
+## FPS 미니게임([씬 파일](./Unity-study/Assets/Scenes/FPS.unity))
+
+주요 주제: 카메라, Raycast
+
+## Imports
+
+* TextMesh Pro
+* unity-chan!
+* Cinemachine
+* Mixamo 애니메이션
