@@ -17,6 +17,7 @@ public class ShooterPlayerModel : MonoBehaviour, IMovableModel
     [SerializeField] private FPS_FireControl fireControl; // zoom 상태일때만 활성화
     [SerializeField] private TextMeshProUGUI magagineUI;
 
+    public event UnityAction OnFire;
     public event UnityAction<Vector3> OnMoveSpeedChanged;
     public event UnityAction<bool> OnZoomChanged;
     public event UnityAction<int> OnBulletsChanged;

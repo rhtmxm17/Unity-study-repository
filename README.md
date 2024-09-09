@@ -38,11 +38,22 @@
 
 ## FPS 미니게임([씬 파일](./Unity-study/Assets/Scenes/FPS.unity))
 
-주요 주제: 카메라, Raycast
+주요 주제: 카메라, Raycast, Canvas(UGUI)
+
+* WASD 입력: 전후좌우 이동
+* 마우스 이동: 카메라 회전
+* 좌클릭: 발사
+* 우클릭: 줌인
+* R키: 재장전
 
 ## Imports
 
-* TextMesh Pro
-* unity-chan!
-* Cinemachine
-* Mixamo 애니메이션
+커밋에 포함시키지 않은, AssetStore 등에서 적용시킨 에셋
+
+* TextMesh Pro(Unity Package)
+* Cinemachine(Unity Package)
+* Unity-Chan! Model([AssetStore](https://assetstore.unity.com/packages/3d/characters/unity-chan-model-18705))
+* Legacy Particle Pack([AssetStore](https://assetstore.unity.com/packages/vfx/particles/legacy-particle-pack-73777))
+* AllSky Free([AssetStore](https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014))
+* Free UI Click Sound Pack([AssetStore](https://assetstore.unity.com/packages/audio/sound-fx/free-ui-click-sound-pack-244644))
+* Mixamo의 애니메이션([Site](https://www.mixamo.com/))

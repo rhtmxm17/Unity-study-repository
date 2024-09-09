@@ -1,11 +1,8 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class FPS_FireControl : MonoBehaviour
 {
-    public UnityEvent<int> OnLoadedBulletChanged;
-
     [SerializeField] private Transform muzzle;
 
     [Header("사격 설정")]
@@ -14,26 +11,21 @@ public class FPS_FireControl : MonoBehaviour
     [SerializeField] private float reloadTime = 2f;
     [SerializeField] private FireFlag fireLock;
 
+    private ShooterPlayerModel model;
+
     [System.Flags]
     public enum FireFlag
     {
-        Reloading   = 1 << 0,
-        ExtraLock   = 1 << 2,
-        ZoomLock    = 1 << 3,
+        Reloading = 1 << 0,
+        ExtraLock = 1 << 2,
+        ZoomLock = 1 << 3,
 
     }
 
-    
-
-    private int loaded;
     public int Loaded
     {
-        get => loaded;
-        private set
-        {
-            loaded = value;
-            OnLoadedBulletChanged?.Invoke(loaded);
-        }
+        get => model.Bullets;
+        private set => model.Bullets = value;
     }
 
     public bool ZoomLock
@@ -67,6 +59,7 @@ public class FPS_FireControl : MonoBehaviour
 
     private void Awake()
     {
+        model = GetComponent<ShooterPlayerModel>();
         hitableMask = MyUtil.maskMonster | MyUtil.maskDefault;
         waitFire = new(secondsPerFire);
         waitReload = new(reloadTime);
