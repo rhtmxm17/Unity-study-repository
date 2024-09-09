@@ -16,6 +16,7 @@ public class ShooterPlayerModel : MonoBehaviour, IMovableModel
     [SerializeField] private Image zoomImage;
     [SerializeField] private FPS_FireControl fireControl; // zoom 상태일때만 활성화
     [SerializeField] private TextMeshProUGUI magagineUI;
+    [SerializeField] private AudioClip audioClipFire;
 
     public event UnityAction OnFire;
     public event UnityAction<Vector3> OnMoveSpeedChanged;
@@ -46,6 +47,11 @@ public class ShooterPlayerModel : MonoBehaviour, IMovableModel
         {
             OnBulletsChanged += PresentBullet;
         }
+
+        if (audioClipFire != null)
+        {
+            OnFire += PresentFireAudio;
+        }
     }
 
     public Vector3 MoveSpeed
@@ -64,6 +70,11 @@ public class ShooterPlayerModel : MonoBehaviour, IMovableModel
     {
         get => bullets;
         set { bullets = value; OnBulletsChanged?.Invoke(value); }
+    }
+
+    public void TriggerFire()
+    {
+        OnFire?.Invoke();
     }
 
     private void PresentAnimatorMoveSpeed(Vector3 speed)
@@ -104,4 +115,6 @@ public class ShooterPlayerModel : MonoBehaviour, IMovableModel
     }
 
     private void PresentBullet(int bullets) => magagineUI.SetText("{0}/30", bullets);
+
+    private void PresentFireAudio() => SoundManager.instance.PlaySFX(audioClipFire);
 }

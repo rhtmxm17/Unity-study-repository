@@ -19,9 +19,25 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+    }
+
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioSource sfxSource;
 
-    public void PlaySFX(AudioClip clip, float volumeScale) => sfxSource.PlayOneShot(clip, volumeScale);
+    public void PlayBGM(AudioClip clip)
+    {
+        bgmSource.clip = clip;
+        bgmSource.Play();
+    }
+
+    public void PlaySFX(AudioClip clip, float volumeScale = 1f) => sfxSource.PlayOneShot(clip, volumeScale);
 }

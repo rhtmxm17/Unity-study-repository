@@ -55,8 +55,6 @@ public class FPS_FireControl : MonoBehaviour
     private Coroutine fireRoutine;
     private Coroutine reloadRoutine;
 
-
-
     private void Awake()
     {
         model = GetComponent<ShooterPlayerModel>();
@@ -126,7 +124,7 @@ public class FPS_FireControl : MonoBehaviour
     private void Fire()
     {
         Loaded--;
-        Debug.Log("발사");
+        model.TriggerFire();
 
         if (Physics.Raycast(muzzle.position, muzzle.forward, out RaycastHit info, 100f, hitableMask))
         {
