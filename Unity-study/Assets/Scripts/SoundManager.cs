@@ -3,7 +3,7 @@ using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager instance;
+    private static SoundManager instance;
     public static SoundManager Instance
     {
         get

@@ -116,5 +116,5 @@ public class ShooterPlayerModel : MonoBehaviour, IMovableModel
 
     private void PresentBullet(int bullets) => magagineUI.SetText("{0}/30", bullets);
 
-    private void PresentFireAudio() => SoundManager.instance.PlaySFX(audioClipFire);
+    private void PresentFireAudio() => SoundManager.Instance.PlaySFX(audioClipFire);
 }

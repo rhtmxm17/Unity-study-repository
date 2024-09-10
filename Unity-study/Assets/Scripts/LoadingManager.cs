@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadingManager : MonoBehaviour
 {
-    public static LoadingManager instance;
+    private static LoadingManager instance;
     public static LoadingManager Instance
     {
         get
@@ -28,11 +28,6 @@ public class LoadingManager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start()
-    {
-        StartLoadScene("Timeline");
     }
 
     public bool AllowSceneActivation
