@@ -27,6 +27,7 @@ public class SoundManager : MonoBehaviour
             return;
         }
         instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     [SerializeField] private AudioMixer mixer;
