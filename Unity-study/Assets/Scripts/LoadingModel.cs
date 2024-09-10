@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LoadingModel : MonoBehaviour
 {
-    [SerializeField] private string nextSceneName; // 불러올 씬을 등록
+    [SerializeField] public string nextSceneName; // 불러올 씬을 등록
     [SerializeField] private float checkProcessPeriod = 0.1f; // 슬라이더 갱신 주기
 
     [SerializeField] private Slider loadingSlider;
@@ -21,13 +21,16 @@ public class LoadingModel : MonoBehaviour
 
     private void Start()
     {
+        if (string.Empty != LoadingManager.Instance.nextSceneName)
+            nextSceneName = LoadingManager.Instance.nextSceneName;
+
         loadingSlider.value = 0f;
         DontDestroyOnLoad(uiAnimation.gameObject);
 
         StartCoroutine(WaitAnyInputForStartLoading());
     }
 
-    // 실제라면 필요 없는 동작이겠지만 테스트 작동 확인을 위해 단계를 추가
+    // 실제라면 바로 로딩을 시작하겠지만 테스트 작동 확인을 위해 단계를 추가
     private IEnumerator WaitAnyInputForStartLoading()
     {
         loadingText.SetText("아무 키나 누르면 로딩을 시작합니다.");

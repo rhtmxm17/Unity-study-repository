@@ -52,8 +52,10 @@ public class LoadingManager : MonoBehaviour
         }
     }
 
+    public string nextSceneName;
+
     private AsyncOperation loadingOperation;
-    [SerializeField] private bool allowSceneActivation;
+    private bool allowSceneActivation;
 
     public void StartLoadScene(string sceneName)
     {
@@ -64,6 +66,16 @@ public class LoadingManager : MonoBehaviour
         {
             Debug.Log($"씬 전환: {sceneName}");
             loadingOperation = null;
+            nextSceneName = string.Empty;
         };
+    }
+
+    public void LoadSceneWithLoading(string sceneName)
+    {
+        nextSceneName = sceneName;
+        SceneManager.LoadScene("Loading");
+        //// 아직 활성화되지 않은 오브젝트라서 작동을 안함
+        //var model = GameObject.FindWithTag("GameController").GetComponent<LoadingModel>();
+        //model.nextSceneName = sceneName;
     }
 }

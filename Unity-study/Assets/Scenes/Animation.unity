@@ -180,7 +180,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: c517d25c16243e249b7a41669c903f65, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: c59e3cb7839c2dd43a3a1088139064ae, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c517d25c16243e249b7a41669c903f65, type: 3}
 --- !u!1 &596730235
@@ -581,6 +581,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: d6dad0fb52ba12f458cc7ffb66882391, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 9cc946c0716bab0458cfc015d7b6f995, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6dad0fb52ba12f458cc7ffb66882391, type: 3}
 --- !u!1 &1966857447 stripped
@@ -612,10 +616,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   space: {fileID: 1178808384}
   body: {fileID: 1966857449}
-  movementSpeed: 0.75
+  movementSpeed: 2
   moveY: 0
   rotationDegreesPerSecond: 360
+--- !u!114 &1966857451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966857447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9181c361789cc7b4bb81e7d40397a25b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: {x: 0, y: 0, z: 0}
+  zoom: 0
+  bullets: 0
   animator: {fileID: 1966857448}
+  zoomImage: {fileID: 0}
+  fireControl: {fileID: 0}
+  magagineUI: {fileID: 0}
+  audioClipFire: {fileID: 0}
 --- !u!1 &2028688477
 GameObject:
   m_ObjectHideFlags: 0
