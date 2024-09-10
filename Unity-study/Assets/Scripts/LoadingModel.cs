@@ -10,6 +10,7 @@ public class LoadingModel : MonoBehaviour
 
     [SerializeField] private Slider loadingSlider;
     [SerializeField] private TextMeshProUGUI loadingText;
+    [SerializeField] private Animator uiAnimation;
 
     private WaitForSeconds waitCheckProcess;
 
@@ -21,6 +22,8 @@ public class LoadingModel : MonoBehaviour
     private void Start()
     {
         loadingSlider.value = 0f;
+        DontDestroyOnLoad(uiAnimation.gameObject);
+
         StartCoroutine(WaitAnyInputForStartLoading());
     }
 
@@ -50,6 +53,7 @@ public class LoadingModel : MonoBehaviour
 
         // 로딩 완료시 처리
         loadingText.SetText("로딩 완료! 아무 키나 누르세요.");
+        uiAnimation.SetTrigger("LoadingComplete");
 
         StartCoroutine(WaitAnyInputForNextScene());
     }
@@ -59,6 +63,9 @@ public class LoadingModel : MonoBehaviour
         // 키 입력 전까지 대기
         while (Input.anyKeyDown == false)
             yield return null;
+
+        uiAnimation.SetTrigger("NextScene");
+        Destroy(uiAnimation.gameObject, 2f);
 
         LoadingManager.Instance.AllowSceneActivation = true;
     }
