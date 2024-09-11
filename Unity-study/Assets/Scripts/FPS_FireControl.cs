@@ -4,6 +4,8 @@ using UnityEngine;
 public class FPS_FireControl : MonoBehaviour
 {
     [SerializeField] private Transform muzzle;
+    [SerializeField] private ParticleSystem muzzleParticle;
+    [SerializeField] private ParticleSystem bulletImpactPrefab;
 
     [Header("사격 설정")]
     [SerializeField] private int magazineSize = 30;
@@ -126,6 +128,9 @@ public class FPS_FireControl : MonoBehaviour
         Loaded--;
         model.TriggerFire();
 
+        muzzleParticle.transform.SetPositionAndRotation(muzzle.position, muzzle.rotation * Quaternion.FromToRotation(Vector3.right, Vector3.forward));
+        muzzleParticle.Play();
+
         if (Physics.Raycast(muzzle.position, muzzle.forward, out RaycastHit info, 100f, hitableMask))
         {
             // rigidbody가 있다면 충돌지점이 전체 게임오브젝트의 일부인 것으로 보고 rigidbody의 gameObject를 사용
@@ -134,11 +139,22 @@ public class FPS_FireControl : MonoBehaviour
             if (hitted.layer == MyUtil.layerDefault)
             {
                 Debug.Log("지형 적중");
+                var particle = Instantiate(bulletImpactPrefab);
+                Destroy(particle.gameObject, 5f);
+
+                particle.transform.SetPositionAndRotation
+                (
+                    info.point, // 적중 지점
+                    Quaternion.LookRotation(Vector3.Reflect(muzzle.forward, info.normal)) // 반사각에 맞춰서 회전
+                );
+
+                // 표면에 맞춰서 회전
+                particle.transform.GetChild(1).rotation = Quaternion.LookRotation(-info.normal);
             }
             else if (hitted.layer == MyUtil.layerMonster)
             {
                 Debug.Log("표적 적중");
-                if (hitted.TryGetComponent(out Target target))
+                if (hitted.TryGetComponent(out IDamagedable target))
                 {
                     target.Damaged(1);
                 }
