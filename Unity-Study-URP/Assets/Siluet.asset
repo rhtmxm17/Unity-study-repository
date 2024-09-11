@@ -80,11 +80,11 @@ MonoBehaviour:
         serializedVersion: 2
         m_Bits: 8
       PassNames: []
-    overrideMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    overrideMaterial: {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
     overrideMaterialPassIndex: 0
     overrideDepthState: 1
     depthCompareFunction: 5
-    enableWrite: 1
+    enableWrite: 0
     stencilSettings:
       overrideStencilState: 0
       stencilReference: 0
