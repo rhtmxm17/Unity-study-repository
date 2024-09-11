@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Target : MonoBehaviour
+public class Target : MonoBehaviour, IDamagedable
 {
     [field: SerializeField] public int Hp { get; private set; } = 3;
     public event UnityAction<Target> OnDie;
@@ -37,4 +37,6 @@ public class Target : MonoBehaviour
     {
         Hp = 3;
     }
+
+    public void Damaged(float damage) => Damaged((int)damage);
 }
