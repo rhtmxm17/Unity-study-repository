@@ -1,6 +1,6 @@
 # Input System
 
-[패키지 메뉴얼](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.5/manual/index.html)
+[패키지 메뉴얼](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.5/manual/index.html)  
 기본 Input 클래스의 플랫폼 한계(터치스크린, VR기기)와 같은 문제를 개선한 패키지
 
 ## 준비
