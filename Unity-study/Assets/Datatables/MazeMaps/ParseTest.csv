@@ -1,0 +1,8 @@
+﻿Wall,Wall,Wall,Wall,Wall,Wall,Wall,Wall
+Wall,Coin,,Wall,,,,Wall
+Wall,,Player,Wall,,Coin,,Wall
+Wall,,,Wall,Wall,Wall,,Wall
+Wall,Wall,,,Water,Water,,Wall
+Wall,,,Coin,Water,Water,,Wall
+Wall,,Wall,,,,,Wall
+Wall,Wall,Wall,Wall,Wall,Wall,Wall,Wall
