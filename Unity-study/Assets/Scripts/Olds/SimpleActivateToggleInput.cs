@@ -7,7 +7,8 @@ public class SimpleActivateToggleInput : MonoBehaviour
     [SerializeField] private GameObject[] targetObjects;
     [SerializeField] private Behaviour[] targetBehaviour;
     [SerializeField] private KeyCode toggleKey;
-    [SerializeField] private bool keyDownIsEnable;
+    [SerializeField, Tooltip("True: 스위치, False: 버튼")] private bool isSwitch;
+    [SerializeField, Tooltip("버튼일때만 유효")] private bool keyDownIsEnable;
 
     private void Update()
     {
@@ -15,14 +16,14 @@ public class SimpleActivateToggleInput : MonoBehaviour
         {
             foreach (var obj in targetObjects)
             {
-                obj.SetActive(keyDownIsEnable);
+                obj.SetActive(isSwitch ? !obj.activeSelf : keyDownIsEnable);
             }
             foreach (var obj in targetBehaviour)
             {
-                obj.enabled = keyDownIsEnable;
+                obj.enabled = isSwitch ? !obj.enabled : keyDownIsEnable;
             }
         }
-        if (Input.GetKeyUp(toggleKey))
+        if (Input.GetKeyUp(toggleKey) && !isSwitch)
         {
             foreach (var obj in targetObjects)
             {

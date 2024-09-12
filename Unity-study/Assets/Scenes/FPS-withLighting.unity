@@ -452,6 +452,7 @@ GameObject:
   - component: {fileID: 313540520}
   - component: {fileID: 313540521}
   - component: {fileID: 313540522}
+  - component: {fileID: 313540523}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -583,6 +584,24 @@ MonoBehaviour:
   fireControl: {fileID: 0}
   magagineUI: {fileID: 652950203}
   audioClipFire: {fileID: 8300000, guid: 90f232b178ab14b4c9f100e3d7457919, type: 3}
+--- !u!114 &313540523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313540516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a2290ccdeaee874fb0728f91782d516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObjects:
+  - {fileID: 221186247}
+  targetBehaviour: []
+  toggleKey: 102
+  isSwitch: 1
+  keyDownIsEnable: 0
 --- !u!1 &384502701
 GameObject:
   m_ObjectHideFlags: 0
@@ -2061,6 +2080,7 @@ MonoBehaviour:
   targetBehaviour:
   - {fileID: 705777483}
   toggleKey: 9
+  isSwitch: 0
   keyDownIsEnable: 1
 --- !u!4 &1964413737
 Transform:
