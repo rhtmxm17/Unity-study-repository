@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -24,6 +25,7 @@ public class MazeData : ScriptableObject
 #if UNITY_EDITOR // csv 파일로부터 데이터 가져오기
     private struct ElementLoadData
     {
+        public GameObject prefab;
         public List<Vector2Int> positions;
     }
 
@@ -33,8 +35,8 @@ public class MazeData : ScriptableObject
         Debug.Log($"현재 System.IO 상대경로 기본 위치: {Path.GetFullPath(".")}");
         string selfPath = AssetDatabase.GetAssetPath(this);
         string csvPath = Path.ChangeExtension(selfPath, ".csv"); // 동명의 확장자만 다른 csv파일 경로
-
-        if (false == Directory.Exists(csvPath))
+        
+        if (false == File.Exists(csvPath))
         {
             Debug.LogError("CSV 파일을 찾을 수 없습니다.");
         }
@@ -64,10 +66,18 @@ public class MazeData : ScriptableObject
                 }
                 else
                 {
+                    // 기존 데이터에 같은 키값으로 등록된 prefab이 있다면 기록한다
+                    int find = ArrayUtility.FindIndex(elements, element =>
+                    {
+                        return element.id == cell[x];
+                    });
+                    GameObject oldPrefab = find < 0 ? null : elements[find].prefab;
+
                     // 처음 발견한 키값이라면 Dictionary.Add
                     dataFromCsv.Add(cell[x], new ElementLoadData()
                     {
-                        positions = new List<Vector2Int>() { new Vector2Int(x, y) }
+                        prefab = oldPrefab,
+                        positions = new List<Vector2Int>() { new Vector2Int(x, y) },
                     });
                 }
             }
@@ -81,13 +91,14 @@ public class MazeData : ScriptableObject
             elements[i] = new MazeElements()
             {
                 id = pair.Key,
+                prefab = pair.Value.prefab,
                 positions = pair.Value.positions.ToArray(),
             };
             i++;
         }
 
         // 완료
-        Debug.LogWarning("읽어오기 완료, ID별 GameObject는 수동으로 넣어주세요");
+        Debug.LogWarning("읽어오기 완료, ID별 비어있는 GameObject는 수동으로 넣어주세요");
 
         //MazeData newData = CreateInstance<MazeData>();
         //AssetDatabase.CreateAsset(newData, $"Assets/Datatables/MazeMaps/MazeDataFromCSV.asset");
