@@ -15,7 +15,7 @@ public class MazeData : ScriptableObject
         public Vector2Int[] positions;
     }
 
-    [SerializeField] private MazeElements[] elements;
+    [SerializeField] private MazeElements[] elements = Array.Empty<MazeElements>();
     [SerializeField] private Vector2Int mapSize;
 
     public MazeElements[] Elements { get => elements; }

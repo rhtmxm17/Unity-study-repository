@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class MazeBuilder : MonoBehaviour
 {
-    [SerializeField] private MazeData data;
+    [SerializeField] private MazeData mazeData;
     [SerializeField] private NavMeshSourceTag[] extraSource;
 
     private GameObject[,] blocks;
@@ -13,7 +13,7 @@ public class MazeBuilder : MonoBehaviour
 
     private void Awake()
     {
-        blocks = new GameObject[data.MapSize.x, data.MapSize.y];
+        blocks = new GameObject[mazeData.MapSize.x, mazeData.MapSize.y];
     }
 
     private void Start()
@@ -26,18 +26,19 @@ public class MazeBuilder : MonoBehaviour
     {
 
         List<NavMeshBuildSource> buildSources = new();
+        Vector3 leftTop = new Vector3(mazeData.MapSize.x - 1, 0, mazeData.MapSize.y - 1) * -0.5f;
 
         foreach (var source in extraSource)
         {
             buildSources.Add(source.GetBuildSource());
         }
 
-        foreach (var elements in this.data.Elements)
+        foreach (var elements in mazeData.Elements)
         {
             foreach (var position in elements.positions)
             {
                 GameObject instance = Instantiate(elements.prefab, transform);
-                instance.transform.SetLocalPositionAndRotation(new Vector3(position.x, 0, position.y), transform.rotation);
+                instance.transform.SetLocalPositionAndRotation(new Vector3(position.x, 0, position.y) + leftTop, transform.rotation);
                 instance.SetActive(false);
                 blocks[position.x, position.y] = instance;
 
@@ -70,9 +71,9 @@ public class MazeBuilder : MonoBehaviour
 
     private void StartAnimation()
     {
-        for (int x = 0; x < 8; x++)
+        for (int x = 0; x < mazeData.MapSize.x; x++)
         {
-            for (int y = 0; y < 8; y++)
+            for (int y = 0; y < mazeData.MapSize.y; y++)
             {
                 if (blocks[x, y] != null)
                 {

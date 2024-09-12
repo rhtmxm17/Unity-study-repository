@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7290346157982974753}
   - component: {fileID: 1460989661739615989}
+  - component: {fileID: 3663516133405843948}
   m_Layer: 0
   m_Name: MazeWater
   m_TagString: Untagged
@@ -54,6 +55,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3663516133405843948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494469901400756893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dbbf67168c82644dbb382be34b2237e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedData: {fileID: 11400000, guid: 3f7c46e2a5d15c4409dcd40e4182b435, type: 2}
+  meshFilter: {fileID: 0}
 --- !u!1 &959663840568677570
 GameObject:
   m_ObjectHideFlags: 0
