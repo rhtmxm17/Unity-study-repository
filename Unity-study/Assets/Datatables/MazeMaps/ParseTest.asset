@@ -52,13 +52,13 @@ MonoBehaviour:
     - {x: 6, y: 7}
     - {x: 7, y: 7}
   - id: Coin
-    prefab: {fileID: 0}
+    prefab: {fileID: 7930815106649876370, guid: 36fa6a49d5b16564fad97f75e6b0ebc4, type: 3}
     positions:
     - {x: 1, y: 1}
     - {x: 5, y: 2}
     - {x: 3, y: 5}
   - id: Player
-    prefab: {fileID: 8433120818039302367, guid: 91be96d1207add04aa51216c4edeefd9, type: 3}
+    prefab: {fileID: 976619460172002338, guid: cf2bd5d527718384686de704583b53a0, type: 3}
     positions:
     - {x: 2, y: 2}
   - id: Water

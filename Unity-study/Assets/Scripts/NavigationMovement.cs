@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
@@ -17,6 +18,7 @@ public class NavigationMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         input = GetComponent<PlayerInput>();
+        input.camera = Camera.main;
         clickMask = ~LayerMask.GetMask("Player", "Ignore Raycast");
     }
 

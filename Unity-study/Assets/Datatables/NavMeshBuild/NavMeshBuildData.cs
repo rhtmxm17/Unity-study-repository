@@ -7,7 +7,7 @@ public class NavMeshBuildData : ScriptableObject
     [SerializeField, Range(0, 31), Tooltip("네비게이션 에리어")] private int area;
     [SerializeField] private NavMeshBuildSourceShape shape;
     [SerializeField, Tooltip("shape가 기본 도형/ModifierBox일 경우 사용")] private Vector3 size = Vector3.one;
-    [SerializeField, Tooltip("shape가 Mesh일 경우 사용")] private MeshFilter meshFilter;
+    //[SerializeField, Tooltip("shape가 Mesh일 경우 사용 가능")] private Mesh sharedMesh;
 
     public NavMeshBuildSource GetBuildSource(Transform sourceTransform)
     {
@@ -17,8 +17,7 @@ public class NavMeshBuildData : ScriptableObject
             shape = shape,
             transform = sourceTransform.localToWorldMatrix,
             size = size,
-            component = meshFilter,
-            //sourceObject = meshFilter.sharedMesh,
+            //sourceObject = sharedMesh,
         };
     }
 }

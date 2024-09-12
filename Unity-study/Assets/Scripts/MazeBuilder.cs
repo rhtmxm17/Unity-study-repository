@@ -5,16 +5,15 @@ using UnityEngine.AI;
 
 public class MazeBuilder : MonoBehaviour
 {
-    [SerializeField] private GameObject wallPrefab;
-    [SerializeField] private GameObject waterPrefab;
-    [SerializeField] private GameObject plane;
+    [SerializeField] private MazeData data;
+    [SerializeField] private NavMeshSourceTag[] extraSource;
 
-    private GameObject[,] tiles;
+    private GameObject[,] blocks;
     private NavMeshDataInstance navInstance;
 
     private void Awake()
     {
-        tiles = new GameObject[8, 8];
+        blocks = new GameObject[data.MapSize.x, data.MapSize.y];
     }
 
     private void Start()
@@ -25,70 +24,32 @@ public class MazeBuilder : MonoBehaviour
 
     private void BuildWallAndNavMesh()
     {
-        // Bake된 기존 데이터 제거
-        // 아예 Bake 안하면 어째선지 유효하지 않다고 나옴...
-        NavMesh.RemoveAllNavMeshData();
 
-        List<NavMeshBuildSource> buildSources = new(12);
-        buildSources.Add(new NavMeshBuildSource()
+        List<NavMeshBuildSource> buildSources = new();
+
+        foreach (var source in extraSource)
         {
-            area = 0, // Walkable
-            shape = NavMeshBuildSourceShape.Mesh,
-            transform = plane.transform.localToWorldMatrix,
-            size = Vector3.one,
-            component = plane.GetComponent<MeshFilter>(),
-            sourceObject = plane.GetComponent<MeshFilter>().sharedMesh,
-        });
-
-        // 벽 생성
-        for (int i = 0; i < 10; i++)
-        {
-            int x, y;
-            do
-            {
-                x = Random.Range(0, 8);
-                y = Random.Range(0, 8);
-            } while (tiles[x, y] != null);
-
-            tiles[x, y] = Instantiate(wallPrefab, transform);
-            tiles[x, y].transform.SetLocalPositionAndRotation(new Vector3(x, 0, y), transform.rotation);
-            tiles[x, y].SetActive(false);
-
-            buildSources.Add(new NavMeshBuildSource()
-            {
-                area = 1, // Not Walkable
-                shape = NavMeshBuildSourceShape.Box,
-                transform = tiles[x, y].transform.localToWorldMatrix,
-                size = Vector3.one,
-                component = tiles[x, y].GetComponentInChildren<MeshFilter>(),
-                sourceObject = tiles[x, y].GetComponentInChildren<MeshFilter>().sharedMesh,
-            });
+            buildSources.Add(source.GetBuildSource());
         }
 
-        // 물 생성
-        for (int i = 0; i < 6; i++)
+        foreach (var elements in this.data.Elements)
         {
-            int x, y;
-            do
+            foreach (var position in elements.positions)
             {
-                x = Random.Range(0, 8);
-                y = Random.Range(0, 8);
-            } while (tiles[x, y] != null);
+                GameObject instance = Instantiate(elements.prefab, transform);
+                instance.transform.SetLocalPositionAndRotation(new Vector3(position.x, 0, position.y), transform.rotation);
+                instance.SetActive(false);
+                blocks[position.x, position.y] = instance;
 
-            tiles[x, y] = Instantiate(waterPrefab, transform);
-            tiles[x, y].transform.SetLocalPositionAndRotation(new Vector3(x, 0, y), transform.rotation);
-            tiles[x, y].SetActive(false);
+                // 태그를 달고있다면 빌드 정보 등록
+                if (instance.TryGetComponent(out NavMeshSourceTag tag))
+                {
+                    buildSources.Add(tag.GetBuildSource());
+                }
+            }
 
-            buildSources.Add(new NavMeshBuildSource()
-            {
-                area = 3, // Water
-                shape = NavMeshBuildSourceShape.ModifierBox,
-                transform = tiles[x, y].transform.localToWorldMatrix,
-                size = Vector3.one,
-                component = tiles[x, y].GetComponentInChildren<MeshFilter>(),
-                sourceObject = tiles[x, y].GetComponentInChildren<MeshFilter>().sharedMesh,
-            });
         }
+
 
         //// 에디터 한정 네임스페이스, 빌드된 게임에서는 못쓰는듯..
         //UnityEditor.AI.NavMeshBuilder.BuildNavMesh();
@@ -98,6 +59,10 @@ public class MazeBuilder : MonoBehaviour
 
         // 데이터 생성
         NavMeshData data = NavMeshBuilder.BuildNavMeshData(settings, buildSources, new Bounds(Vector3.zero, Vector3.one * 10f), Vector3.zero, Quaternion.identity);
+
+        // Bake된 기존 데이터 제거
+        // 아예 Bake 안하면 어째선지 유효하지 않다고 나옴...
+        NavMesh.RemoveAllNavMeshData();
 
         // 생성한 데이터 넣기
         navInstance = NavMesh.AddNavMeshData(data);
@@ -109,9 +74,9 @@ public class MazeBuilder : MonoBehaviour
         {
             for (int y = 0; y < 8; y++)
             {
-                if (tiles[x, y] != null)
+                if (blocks[x, y] != null)
                 {
-                    StartCoroutine(TileActiveRoutine(tiles[x, y], (x + y) * 0.1f));
+                    StartCoroutine(TileActiveRoutine(blocks[x, y], (x + y) * 0.1f));
                 }
             }
         }
