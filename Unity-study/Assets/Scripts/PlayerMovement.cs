@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,10 +10,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float rotationDegreesPerSecond = 360f;
 
     private IMovableModel model;
+    private PlayerInput playerInput;
 
     private void Awake()
     {
+        if (space == null)
+            space = transform;
         model = GetComponent<IMovableModel>();
+        playerInput = GetComponent<PlayerInput>();
     }
 
     private void Update()
@@ -23,26 +28,26 @@ public class PlayerMovement : MonoBehaviour
 
         // 방향 결정
         Vector3 dir = space.rotation * new Vector3(x, 0, z); // 기준 Transform의 방향으로 변환
-        model.MoveSpeed = movementSpeed * new Vector3(x, 0, z);
         if (false == moveY)
             dir.y = 0f;
-        if (dir == Vector3.zero)
-        {
-            return;
-        }
         dir.Normalize();
+
         // 이동
         transform.Translate(Time.deltaTime * movementSpeed * dir, Space.World);
 
-        if (body != null)
+        // 회전
+        if (false == Input.GetMouseButton(1))
         {
-            // 회전
-            body.rotation = Quaternion.RotateTowards
-            (
-                body.rotation, // 현재 방향
-                Quaternion.LookRotation(dir), // 바라볼 방향
-                Time.deltaTime * rotationDegreesPerSecond // 최대 회전
-            );
+            Vector3 spaceForward = space.forward;
+            if (false == moveY)
+                spaceForward.y = 0f;
+
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation,
+                Quaternion.LookRotation(spaceForward),
+                Time.deltaTime * rotationDegreesPerSecond);
+
         }
+        model.MoveSpeed = transform.worldToLocalMatrix * (movementSpeed * dir);
     }
 }
