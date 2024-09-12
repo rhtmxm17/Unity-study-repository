@@ -31,7 +31,7 @@ public class PooledObject : MonoBehaviour
     }
 
     public void ReturnPool() => Pool.ReturnPool(this.gameObject);
-    
+
     private void OnDisable()
     {
         if (reservation != null)

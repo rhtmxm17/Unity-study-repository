@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,15 +7,19 @@ using UnityEngine;
 public class MazeData : ScriptableObject
 {
     [System.Serializable]
-    public struct Elements
+    public struct MazeElements
     {
         public string id;
         public GameObject prefab;
         public Vector2Int[] positions;
     }
 
-    [SerializeField] private Elements[] elements;
+    [SerializeField] private MazeElements[] elements;
     [SerializeField] private Vector2Int mapSize;
+
+    public MazeElements[] Elements { get => elements; }
+
+    public Vector2Int MapSize { get => mapSize; }
 
 #if UNITY_EDITOR // csv 파일로부터 데이터 가져오기
     private struct ElementLoadData
@@ -41,7 +44,7 @@ public class MazeData : ScriptableObject
 
         string allText = File.ReadAllText(csvPath).TrimEnd();
         string[] lines = allText.Split('\n');
-        
+
         mapSize.y = lines.Length;
         for (int y = 0; y < lines.Length; y++)
         {
@@ -71,11 +74,11 @@ public class MazeData : ScriptableObject
         }
 
         // 읽어온 데이터를 배열로 변환
-        elements = new Elements[dataFromCsv.Count];
+        elements = new MazeElements[dataFromCsv.Count];
         int i = 0;
         foreach (var pair in dataFromCsv)
         {
-            elements[i] = new Elements()
+            elements[i] = new MazeElements()
             {
                 id = pair.Key,
                 positions = pair.Value.positions.ToArray(),

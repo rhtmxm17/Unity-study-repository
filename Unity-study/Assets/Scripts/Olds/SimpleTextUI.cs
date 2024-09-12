@@ -5,7 +5,7 @@ public class SimpleTextUI : MonoBehaviour
 {
     [SerializeField] string label;
     private Text text;
-    
+
     private void Awake()
     {
         if (!TryGetComponent(out text))
@@ -18,7 +18,7 @@ public class SimpleTextUI : MonoBehaviour
     //    text.text = string.Format(label, item);
     //}
 
-    public void UpdateText(string item) =>text.text = string.Format(label, item);
-    public void UpdateText(int item) =>text.text = string.Format(label, item);
-    public void UpdateText(float item) =>text.text = string.Format(label, item);
+    public void UpdateText(string item) => text.text = string.Format(label, item);
+    public void UpdateText(int item) => text.text = string.Format(label, item);
+    public void UpdateText(float item) => text.text = string.Format(label, item);
 }

@@ -13,10 +13,59 @@ MonoBehaviour:
   m_Name: ParseTest
   m_EditorClassIdentifier: 
   elements:
-  - id: 
+  - id: Wall
+    prefab: {fileID: 494469901400756893, guid: e7ce6cedb8d1dfd4a905752911808580, type: 3}
+    positions:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 2, y: 0}
+    - {x: 3, y: 0}
+    - {x: 4, y: 0}
+    - {x: 5, y: 0}
+    - {x: 6, y: 0}
+    - {x: 7, y: 0}
+    - {x: 0, y: 1}
+    - {x: 3, y: 1}
+    - {x: 7, y: 1}
+    - {x: 0, y: 2}
+    - {x: 3, y: 2}
+    - {x: 7, y: 2}
+    - {x: 0, y: 3}
+    - {x: 3, y: 3}
+    - {x: 4, y: 3}
+    - {x: 5, y: 3}
+    - {x: 7, y: 3}
+    - {x: 0, y: 4}
+    - {x: 1, y: 4}
+    - {x: 7, y: 4}
+    - {x: 0, y: 5}
+    - {x: 7, y: 5}
+    - {x: 0, y: 6}
+    - {x: 2, y: 6}
+    - {x: 7, y: 6}
+    - {x: 0, y: 7}
+    - {x: 1, y: 7}
+    - {x: 2, y: 7}
+    - {x: 3, y: 7}
+    - {x: 4, y: 7}
+    - {x: 5, y: 7}
+    - {x: 6, y: 7}
+    - {x: 7, y: 7}
+  - id: Coin
     prefab: {fileID: 0}
-    positions: []
-  - id: 
-    prefab: {fileID: 0}
-    positions: []
-  mapSize: {x: 0, y: 0}
+    positions:
+    - {x: 1, y: 1}
+    - {x: 5, y: 2}
+    - {x: 3, y: 5}
+  - id: Player
+    prefab: {fileID: 8433120818039302367, guid: 91be96d1207add04aa51216c4edeefd9, type: 3}
+    positions:
+    - {x: 2, y: 2}
+  - id: Water
+    prefab: {fileID: 494469901400756893, guid: a4d33ed3fbd0d9f439df64700f4075cd, type: 3}
+    positions:
+    - {x: 4, y: 4}
+    - {x: 5, y: 4}
+    - {x: 4, y: 5}
+    - {x: 5, y: 5}
+  mapSize: {x: 8, y: 8}
