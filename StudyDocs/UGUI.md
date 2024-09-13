@@ -24,7 +24,8 @@ UI의 입력, 상태 변경 등 각종 동작을 관리하는 오브젝트.
 
 ## Image와 RawImage
 
-캔버스에 스프라이트 이미지(텍스처 타입 설정 중 하나)를 그려주는 UI 컴포넌트.
+캔버스에 스프라이트 이미지(텍스처 타입 설정 중 하나)를 그려주는 UI 컴포넌트.  
+UI 이미지의 테두리 형태를 유지한 상태로 UI 크기를 조절하고 싶다면 9슬라이싱 스프라이트를 사용한다. [스터디 문서](./Unity%202D.md#Sprite-Texture)/[매뉴얼](https://docs.unity3d.com/2021.3/Documentation/Manual/9SliceSprites.html)
 
 ## TextMeshPro
 
