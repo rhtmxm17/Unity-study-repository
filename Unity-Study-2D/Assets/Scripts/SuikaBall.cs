@@ -19,6 +19,12 @@ public class SuikaBall : MonoBehaviour
         AdjustGrade();
     }
 
+    public void SetGrade(int value)
+    {
+        grade = value;
+        AdjustGrade();
+    }
+
     private void AdjustGrade()
     {
         float rad = grade * 0.5f;
