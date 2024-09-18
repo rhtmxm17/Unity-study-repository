@@ -53,6 +53,7 @@ public class SuikaBall : MonoBehaviour
 
         grade++;
         AdjustGrade();
+        transform.position = Vector3.Lerp(transform.position, other.transform.position, 0.5f);
     }
 
     private IEnumerator DestroyNextFixedUpdate()

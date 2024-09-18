@@ -1101,6 +1101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   suikaBallPrefab: {fileID: 8010088824675445989, guid: a1c752d3bc3b32f4c86f87fd48bcaee6, type: 3}
+  powerCoefficient: 5
 --- !u!1 &1361138101
 GameObject:
   m_ObjectHideFlags: 0
