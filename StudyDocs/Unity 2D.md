@@ -6,7 +6,7 @@
 ## Physics 2D
 
 게임 로직이 2D로 돌아간다면 Rigid Body, Collider, **메시지 함수(실수하기 쉬움!)** 모두 2D 전용으로 사용하는 것으로 2D 물리엔진을 사용할 수 있다.  
-3D 에서의 Physics와 Physics 2D는 상호작용 하지 않은다.
+3D 에서의 Physics와 Physics 2D는 상호작용 하지 않은다. 클래스부터가 Physics와 Physics2D로 다름.
 
 ### Effector 컴포넌트
 
@@ -33,6 +33,22 @@
 
 * Flip: 스프라이트의 좌우 반전 설정. 탑다운 형식의 2D게임(엔터 더 건전 등)에서 오브젝트의 실제 방향과 스프라이트 출력 방향을 구분해서 사용하고자 하면 필요하다.
 
+## 2D 에서의 Cinemachine
+
+Cinemachine Confiner 2D와 같이 Cinemachine 패키지 또한 2D용 기능을 갖고있다.
+
 ## 쿼터뷰
 
 Project Settings - Graphics 에서 정렬 기준을 Y축으로 바꾸는 것으로 정렬 방식을 쿼터뷰 스타일로 할 수도 있다.
+
+## 2D Animation
+
+2D Animation 또한 Animatior 컴포넌트와 Animation 에셋으로 작동한다.
+
+### Sprite Animation
+
+만화 영화를 출력하듯, 스프라이트 자체를 바꿔가면서 움직임을 보여주는 애니메이션. Animation 에셋에 여러 스프라이트를 등록해서 시간에 따라 사용할 스프라이트를 결정한다.
+
+### Spine Animation
+
+3D에서 사용했던 Animation과 같이, 텍스쳐를 관절 구조로 나누어서 관절마다 위치를 조정해 움직이는 애니메이션
