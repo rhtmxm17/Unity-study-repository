@@ -56,4 +56,5 @@
 * Legacy Particle Pack([AssetStore](https://assetstore.unity.com/packages/vfx/particles/legacy-particle-pack-73777))
 * AllSky Free([AssetStore](https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014))
 * Free UI Click Sound Pack([AssetStore](https://assetstore.unity.com/packages/audio/sound-fx/free-ui-click-sound-pack-244644))
+* Sunny Land([AssetStore](https://assetstore.unity.com/packages/2d/characters/sunny-land-103349))
 * Mixamo의 애니메이션([Site](https://www.mixamo.com/))

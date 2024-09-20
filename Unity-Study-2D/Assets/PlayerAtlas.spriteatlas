@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PlayerAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: c38f07c49aff74810b5ee46bc2a90197, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: c8a742c1f2ebb43b9afe34a47304c051, type: 3}
+  - {fileID: 21300000, guid: 9878b6f1290ef41e88b30f08f68537fd, type: 3}
+  - {fileID: 21300000, guid: 8afd73b29f8e34c70b0db80184b8cc7f, type: 3}
+  - {fileID: 21300000, guid: 8bc3c2c2a565342aab778fd8e874313a, type: 3}
+  - {fileID: 21300000, guid: af314424f59d946469a97f398e8de53f, type: 3}
+  - {fileID: 21300000, guid: a85f3724632254a6cb24066dc54cbf60, type: 3}
+  - {fileID: 21300000, guid: 72de0c64f2c6a498096698322c976a67, type: 3}
+  - {fileID: 21300000, guid: 448d57c5e4c694686badaba281a6adff, type: 3}
+  - {fileID: 21300000, guid: 598fb1767626f42e992bb9c2769d86ea, type: 3}
+  - {fileID: 21300000, guid: f58cc0961cc9146ca9780a0cb1327e5d, type: 3}
+  - {fileID: 21300000, guid: c123c318507c6405a869f2f89068cf06, type: 3}
+  - {fileID: 21300000, guid: e2976d09b53264ffbbb9210a1ae1dcc0, type: 3}
+  - {fileID: 21300000, guid: 077f0469c420a4365bc67943783293df, type: 3}
+  - {fileID: 21300000, guid: d094cf6ac3d8a4d0bbbef5d6d6ad3eed, type: 3}
+  - {fileID: 21300000, guid: bc3fcf1d561104bea933686de6bade4b, type: 3}
+  - {fileID: 21300000, guid: 3f59d4fdf4fe04ab79f11dadde82fe8c, type: 3}
+  - {fileID: 21300000, guid: 94cffd9e5ecd3497c9831ffe8ae1605c, type: 3}
+  - {fileID: 21300000, guid: eb5b673fa31e44bc9b15d686c24009da, type: 3}
+  - {fileID: 21300000, guid: be30195fa34cc45258a6ab7011cb297b, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - player-idle-2
+  - player-crouch-1
+  - player-run-1
+  - player-idle-4
+  - player-run-6
+  - player-hurt-2
+  - player-idle-1
+  - player-crouch-2
+  - player-fall
+  - player-run-5
+  - player-hurt-1
+  - player-jump-1
+  - player-idle-3
+  - player-run-2
+  - player-run-4
+  - player-run-3
+  - player-climb-2
+  - player-climb-3
+  - player-climb-1
+  m_RenderDataMap: {}
+  m_Tag: PlayerAtlas
+  m_IsVariant: 0
