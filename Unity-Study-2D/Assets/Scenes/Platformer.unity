@@ -183,9 +183,9 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
+  m_XDamping: 0
+  m_YDamping: 0
+  m_ZDamping: 0
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
@@ -1098,10 +1098,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1012876559}
   - component: {fileID: 1012876558}
-  - component: {fileID: 1012876557}
+  - component: {fileID: 1012876565}
   - component: {fileID: 1012876560}
   - component: {fileID: 1012876561}
   - component: {fileID: 1012876563}
+  - component: {fileID: 1012876564}
   - component: {fileID: 1012876562}
   m_Layer: 0
   m_Name: Player
@@ -1110,22 +1111,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!58 &1012876557
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1012876556}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.033910394, y: 0.479977}
-  serializedVersion: 2
-  m_Radius: 0.44606662
 --- !u!212 &1012876558
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1208,7 +1193,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -1277,8 +1262,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed8cb69d2ea3c44080e7d49d537795d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedAccel: 25
+  speedAccel: 50
+  speedDecelLerp: 0.1
   maxSpeed: 5
+  jumpPower: 25
+--- !u!114 &1012876564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012876556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a93eca93281e9de45a023fab6c6ebc06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocity: {x: 0, y: 0}
+  isGrounded: 0
+  sprite: {fileID: 0}
+  animator: {fileID: 0}
+--- !u!70 &1012876565
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012876556}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.38577735}
+  m_Size: {x: 0.5391614, y: 0.8340547}
+  m_Direction: 0
 --- !u!1 &1022500970
 GameObject:
   m_ObjectHideFlags: 0
@@ -1358,7 +1377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BoundingShape2D: {fileID: 1003703184}
-  m_Damping: 0.5
+  m_Damping: 0
   m_MaxWindowSize: -1
 --- !u!114 &1029282830
 MonoBehaviour:
@@ -1429,7 +1448,7 @@ GameObject:
   - component: {fileID: 1433744341}
   - component: {fileID: 1433744340}
   - component: {fileID: 1433744343}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Platformer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1976,7 +1995,7 @@ GameObject:
   - component: {fileID: 1843146346}
   - component: {fileID: 1843146350}
   - component: {fileID: 1843146349}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
