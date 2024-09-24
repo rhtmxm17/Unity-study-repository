@@ -83,12 +83,17 @@ public class TileMapAstar : MonoBehaviour
         map = new(wall);
     }
 
-    private void Start()
+    [ContextMenu("TestFunction")]
+    private void FindPathTest()
     {
         FindPath(new Vector2Int(-3, 2), new Vector2Int(4, -3), out var path);
 
-        foreach(var item in path)
+        Vector3 from = wall.GetCellCenterWorld(new Vector3Int(-3, 2, 0));
+        foreach (var item in path)
         {
+            Vector3 to = wall.GetCellCenterWorld((Vector3Int)item);
+            Debug.DrawLine(from, to, Color.white, 5f);
+            from = to;
             Debug.Log(item);
         }
     }
