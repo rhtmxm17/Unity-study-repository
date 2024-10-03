@@ -5,6 +5,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput), typeof(Rigidbody2D), typeof(PlatformerPlayerModel))]
 public class PlatformerPlayerControl : MonoBehaviour
 {
+    [SerializeField] float speedAccel = 25f;
+    [SerializeField, Tooltip("매 FixedUpdate마다 감쇄량")] float speedDecelLerp = 0.1f;
+    [SerializeField] float maxSpeed = 5f;
+    [SerializeField] float jumpPower = 25f;
+
     private PlayerInput playerInput;
     private Rigidbody2D body;
     private PlatformerPlayerModel model;
@@ -12,10 +17,7 @@ public class PlatformerPlayerControl : MonoBehaviour
     private Coroutine moveRoutine;
     private YieldInstruction waitPhysics;
 
-    [SerializeField] float speedAccel = 25f;
-    [SerializeField, Tooltip("매 FixedUpdate마다 감쇄량")] float speedDecelLerp = 0.1f;
-    [SerializeField] float maxSpeed = 5f;
-    [SerializeField] float jumpPower = 25f;
+    private LayerMask groundLayerMask;
 
     private void Awake()
     {
@@ -24,6 +26,7 @@ public class PlatformerPlayerControl : MonoBehaviour
         model = GetComponent<PlatformerPlayerModel>();
 
         waitPhysics = new WaitForFixedUpdate();
+        groundLayerMask = LayerMask.GetMask("Ground");
     }
 
     private void Start()
@@ -53,6 +56,24 @@ public class PlatformerPlayerControl : MonoBehaviour
     private void Update()
     {
         model.Velocity = body.velocity;
+
+        var result = Physics2D.Raycast(transform.position, Vector2.down, 0.5f, groundLayerMask);
+        model.IsGrounded = (null != result.collider);
+    }
+
+    private void FixedUpdate()
+    {
+        var result = Physics2D.Raycast(transform.position, Vector2.down, 0.5f, groundLayerMask);
+        if (null == result.collider)
+        {
+            model.IsGrounded = true;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, Vector2.down * 0.5f + (Vector2)transform.position);
     }
 
     private IEnumerator AccelRoutine(InputAction action)
@@ -100,4 +121,5 @@ public class PlatformerPlayerControl : MonoBehaviour
     //        model.IsGrounded = true;
     //    }
     //}
+
 }

@@ -12,6 +12,8 @@ public class PlatformerPlayerModel : MonoBehaviour
     [SerializeField] Animator animator;
 
     private int animatorIndex_IsGrounded;
+    private int animatorIndex_VelocityX;
+    private int animatorIndex_VelocityY;
 
     public event UnityAction OnVelocityChanged;
     public event UnityAction OnGroundChanged;
@@ -25,7 +27,7 @@ public class PlatformerPlayerModel : MonoBehaviour
     public bool IsGrounded
     {
         get => isGrounded;
-        set { isGrounded = value; OnGroundChanged?.Invoke(); }
+        set { if (isGrounded == value) return; isGrounded = value; OnGroundChanged?.Invoke(); }
     }
 
     private void Awake()
@@ -36,8 +38,11 @@ public class PlatformerPlayerModel : MonoBehaviour
         }
         if (TryGetComponent(out animator))
         {
-            OnGroundChanged += GroundAnimation;
+            OnGroundChanged += AnimatorSetGrounded;
+            OnVelocityChanged += AnimatorSetVelocity;
             animatorIndex_IsGrounded = Animator.StringToHash("IsGrounded");
+            animatorIndex_VelocityX = Animator.StringToHash("VelocityX");
+            animatorIndex_VelocityY = Animator.StringToHash("VelocityY");
         }
     }
 
@@ -49,8 +54,14 @@ public class PlatformerPlayerModel : MonoBehaviour
             sprite.flipX = true;
     }
 
-    private void GroundAnimation()
+    private void AnimatorSetGrounded()
     {
         animator.SetBool(animatorIndex_IsGrounded, isGrounded);
+    }
+
+    private void AnimatorSetVelocity()
+    {
+        animator.SetFloat(animatorIndex_VelocityX, velocity.x);
+        animator.SetFloat(animatorIndex_VelocityY, velocity.y);
     }
 }
