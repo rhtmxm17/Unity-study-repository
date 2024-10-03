@@ -11,6 +11,9 @@ public class PlatformerPlayerControl : MonoBehaviour
     [SerializeField] float jumpPower = 25f;
 
     private PlayerInput playerInput;
+    private InputAction moveAction;
+    private InputAction jumpAction;
+
     private Rigidbody2D body;
     private PlatformerPlayerModel model;
 
@@ -19,11 +22,19 @@ public class PlatformerPlayerControl : MonoBehaviour
 
     private LayerMask groundLayerMask;
 
+    private enum State { Ground, Jump, Dead, COUNT }
+    private State curState;
+    private StateBase[] states;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         body = GetComponent<Rigidbody2D>();
         model = GetComponent<PlatformerPlayerModel>();
+
+        states = new StateBase[(int)State.COUNT];
+        states[(int)State.Ground] = new GroundState(this);
+        states[(int)State.Jump] = new JumpState(this);
 
         waitPhysics = new WaitForFixedUpdate();
         groundLayerMask = LayerMask.GetMask("Ground");
@@ -32,38 +43,34 @@ public class PlatformerPlayerControl : MonoBehaviour
     private void Start()
     {
         moveRoutine = StartCoroutine(DecelRoutine());
+        moveAction = playerInput.actions["MoveX"];
+        jumpAction = playerInput.actions["Jump"];
 
-        InputAction moveAction = playerInput.actions["MoveX"];
-        moveAction.started += Accel;
-        moveAction.canceled += Decel;
-
-        playerInput.actions["Jump"].started += Jump;
+        curState = State.Ground;
+        states[(int)curState].Enter();
     }
 
     private void OnDestroy()
     {
-        InputAction moveAction = playerInput.actions["MoveX"];
-        moveAction.started -= Accel;
-        moveAction.canceled -= Decel;
-
-        playerInput.actions["Jump"].started -= Jump;
+        states[(int)curState].Exit();
     }
 
     private void Update()
     {
         model.Velocity = body.velocity;
-
-        var result = Physics2D.Raycast(transform.position, Vector2.down, 0.5f, groundLayerMask);
-        model.IsGrounded = (null != result.collider);
     }
 
-    private void FixedUpdate()
+    private void ChangeState(State nextState)
+    {
+        states[(int)curState].Exit();
+        curState = nextState;
+        states[(int)curState].Enter();
+    }
+
+    private bool CheckIsGrounded()
     {
         var result = Physics2D.Raycast(transform.position, Vector2.down, 0.5f, groundLayerMask);
-        if (null == result.collider)
-        {
-            model.IsGrounded = true;
-        }
+        return (null != result.collider);
     }
 
     private void OnDrawGizmos()
@@ -82,15 +89,6 @@ public class PlatformerPlayerControl : MonoBehaviour
     {
         StopCoroutine(moveRoutine);
         moveRoutine = StartCoroutine(DecelRoutine());
-    }
-
-    private void Jump(InputAction.CallbackContext context)
-    {
-        if (model.IsGrounded)
-        {
-            body.AddForce(jumpPower * Vector2.up, ForceMode2D.Impulse);
-            model.IsGrounded = false;
-        }
     }
 
     private IEnumerator AccelRoutine(InputAction.CallbackContext action)
@@ -122,21 +120,84 @@ public class PlatformerPlayerControl : MonoBehaviour
         }
     }
 
-    //// 벽과 바닥이 동일한 오브젝트일 경우 오작동
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-    //    {
-    //        Debug.Log(collision.GetContact(0).normal);
+    private class GroundState : StateBase
+    {
+        private PlatformerPlayerControl self;
+        private Coroutine groundCheckRoutine;
 
-    //        if (collision.GetContact(0).normal.y < 0.7) // 약 45도
-    //        {
-    //            Debug.Log("벽/천장 충돌");
-    //            return;
-    //        }
-            
-    //        model.IsGrounded = true;
-    //    }
-    //}
+        public GroundState(PlatformerPlayerControl self)
+        {
+            this.self = self;
+        }
 
+        public override void Enter()
+        {
+            self.model.IsGrounded = true;
+            groundCheckRoutine = self.StartCoroutine(GroundCheck());
+            self.moveAction.started += self.Accel;
+            self.moveAction.canceled += self.Decel;
+            self.jumpAction.started += Jump;
+        }
+
+        public override void Exit()
+        {
+            self.StopCoroutine(groundCheckRoutine);
+            self.moveAction.started -= self.Accel;
+            self.moveAction.canceled -= self.Decel;
+            self.jumpAction.started -= Jump;
+        }
+
+        private IEnumerator GroundCheck()
+        {
+            while(true)
+            {
+                yield return null;
+                if (false == self.CheckIsGrounded())
+                    self.ChangeState(State.Jump);
+            }
+        }
+
+        private void Jump(InputAction.CallbackContext context)
+        {
+            self.body.AddForce(self.jumpPower * Vector2.up, ForceMode2D.Impulse);
+        }
+    }
+
+    private class JumpState : StateBase
+    {
+        private PlatformerPlayerControl self;
+        private Coroutine groundCheckRoutine;
+
+        public JumpState(PlatformerPlayerControl self)
+        {
+            this.self = self;
+        }
+
+        public override void Enter()
+        {
+            self.model.IsGrounded = false;
+            groundCheckRoutine = self.StartCoroutine(GroundCheck());
+            self.moveAction.started += self.Accel;
+            self.moveAction.canceled += self.Decel;
+        }
+
+        public override void Exit()
+        {
+            self.StopCoroutine(groundCheckRoutine);
+            self.moveAction.started -= self.Accel;
+            self.moveAction.canceled -= self.Decel;
+        }
+
+        private IEnumerator GroundCheck()
+        {
+            while (true)
+            {
+                yield return null;
+
+                // 떨어지는 도중에만 지면을 확인
+                if (self.body.velocity.y <= 0f && self.CheckIsGrounded())
+                    self.ChangeState(State.Ground);
+            }
+        }
+    }
 }
