@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6285002258208627382}
   - component: {fileID: 6285002258208627377}
   - component: {fileID: 6285002258208627383}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -178,6 +178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0}
   isGrounded: 0
+  hp: 3
   sprite: {fileID: 0}
   animator: {fileID: 0}
 --- !u!114 &6285002258208627383

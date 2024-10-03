@@ -26,6 +26,11 @@ public class PlatformerPlayerControl : MonoBehaviour
     private State curState;
     private StateBase[] states;
 
+    public void Damaged(int damage)
+    {
+        model.Hp -= damage;
+    }
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -35,6 +40,7 @@ public class PlatformerPlayerControl : MonoBehaviour
         states = new StateBase[(int)State.COUNT];
         states[(int)State.Ground] = new GroundState(this);
         states[(int)State.Jump] = new JumpState(this);
+        states[(int)State.Dead] = new DieState(this);
 
         waitPhysics = new WaitForFixedUpdate();
         groundLayerMask = LayerMask.GetMask("Ground");
@@ -45,6 +51,8 @@ public class PlatformerPlayerControl : MonoBehaviour
         moveRoutine = StartCoroutine(DecelRoutine());
         moveAction = playerInput.actions["MoveX"];
         jumpAction = playerInput.actions["Jump"];
+
+        model.OnHpChanged += CheckHpChanged;
 
         curState = State.Ground;
         states[(int)curState].Enter();
@@ -65,6 +73,14 @@ public class PlatformerPlayerControl : MonoBehaviour
         states[(int)curState].Exit();
         curState = nextState;
         states[(int)curState].Enter();
+    }
+
+    private void CheckHpChanged()
+    {
+        if (model.Hp <= 0)
+        {
+            ChangeState(State.Dead);
+        }
     }
 
     private bool CheckIsGrounded()
@@ -122,7 +138,7 @@ public class PlatformerPlayerControl : MonoBehaviour
 
     private class GroundState : StateBase
     {
-        private PlatformerPlayerControl self;
+        private readonly PlatformerPlayerControl self;
         private Coroutine groundCheckRoutine;
 
         public GroundState(PlatformerPlayerControl self)
@@ -165,7 +181,7 @@ public class PlatformerPlayerControl : MonoBehaviour
 
     private class JumpState : StateBase
     {
-        private PlatformerPlayerControl self;
+        private readonly PlatformerPlayerControl self;
         private Coroutine groundCheckRoutine;
 
         public JumpState(PlatformerPlayerControl self)
@@ -198,6 +214,27 @@ public class PlatformerPlayerControl : MonoBehaviour
                 if (self.body.velocity.y <= 0f && self.CheckIsGrounded())
                     self.ChangeState(State.Ground);
             }
+        }
+    }
+
+    private class DieState : StateBase
+    {
+        private readonly PlatformerPlayerControl self;
+
+        public DieState(PlatformerPlayerControl self)
+        {
+            this.self = self;
+        }
+
+        public override void Enter()
+        {
+            self.model.TriggerOnDie();
+            self.model.OnHpChanged -= self.CheckHpChanged;
+        }
+
+        public override void Exit()
+        {
+
         }
     }
 }
