@@ -34,23 +34,19 @@ public class PlatformerPlayerControl : MonoBehaviour
         moveRoutine = StartCoroutine(DecelRoutine());
 
         InputAction moveAction = playerInput.actions["MoveX"];
-        moveAction.started += context =>
-        {
-            StopCoroutine(moveRoutine);
-            moveRoutine = StartCoroutine(AccelRoutine(moveAction));
-        };
+        moveAction.started += Accel;
+        moveAction.canceled += Decel;
 
-        moveAction.canceled += context =>
-        {
-            StopCoroutine(moveRoutine);
-            moveRoutine = StartCoroutine(DecelRoutine());
-        };
+        playerInput.actions["Jump"].started += Jump;
+    }
 
-        playerInput.actions["Jump"].started += context =>
-        {
-            body.AddForce(jumpPower * Vector2.up, ForceMode2D.Impulse);
-            model.IsGrounded = false;
-        };
+    private void OnDestroy()
+    {
+        InputAction moveAction = playerInput.actions["MoveX"];
+        moveAction.started -= Accel;
+        moveAction.canceled -= Decel;
+
+        playerInput.actions["Jump"].started -= Jump;
     }
 
     private void Update()
@@ -76,7 +72,28 @@ public class PlatformerPlayerControl : MonoBehaviour
         Gizmos.DrawLine(transform.position, Vector2.down * 0.5f + (Vector2)transform.position);
     }
 
-    private IEnumerator AccelRoutine(InputAction action)
+    private void Accel(InputAction.CallbackContext context)
+    {
+        StopCoroutine(moveRoutine);
+        moveRoutine = StartCoroutine(AccelRoutine(context));
+    }
+
+    private void Decel(InputAction.CallbackContext context)
+    {
+        StopCoroutine(moveRoutine);
+        moveRoutine = StartCoroutine(DecelRoutine());
+    }
+
+    private void Jump(InputAction.CallbackContext context)
+    {
+        if (model.IsGrounded)
+        {
+            body.AddForce(jumpPower * Vector2.up, ForceMode2D.Impulse);
+            model.IsGrounded = false;
+        }
+    }
+
+    private IEnumerator AccelRoutine(InputAction.CallbackContext action)
     {
         while (true)
         {

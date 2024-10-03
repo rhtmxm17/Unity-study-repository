@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class CollectingStage : MonoBehaviour
 {
@@ -24,5 +26,11 @@ public class CollectingStage : MonoBehaviour
                     OnClear.Invoke();
             };
         }
+
+        var input = PlayerInput.GetPlayerByIndex(0);
+        input.actions["R"].performed += context =>
+        {
+            SceneManager.LoadScene("Platformer");
+        };
     }
 }
