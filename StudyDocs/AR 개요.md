@@ -10,8 +10,6 @@
 영상 분석에는 일반적으로 OpenCV가 사용되는데, OpenCV는 Vulkan을 지원하지 않는다. 따라서 `Project Settings`-`Player`-`Other Settings` 에서 `Auto Graphics API`를 체크 해제 후 Vulkan을 제거해서 그래픽 API중 Vulkan을 사용하지 않도록 해줘야 한다.  
 또한 안드로이드 API 자체에도 AR을 작동시키기 위한 기능이 포함되어 있어야 하므로 `Minimum API Level`을 `Android 7.0`으로 선택한다.
 
-`Scripting Backend`: 중간 언어로 CIL을 사용할지 C++까지 사용할지를 결정한다. IL2CPP를 선택해서 특히 모바일 환경에서의 성능 향상을 기대할 수 있다. 하지만 빌드 시간이 더 길어지는 점에 유의하자.
-
 ## AR 사용시의 유니티 장면
 
 AR에서는 플레이어가 있는 현실 공간 위에 게임을 포함시키게 된다. 따라서 개발자가 환경부터 구성하던 다른 게임의 경우와 달리 입력에 따라 플레이어가 움직이는 것이 아니라, 플레이어가 마음대로 움직이고 그 움직임을 읽어와야 한다.
@@ -19,11 +17,42 @@ AR에서는 플레이어가 있는 현실 공간 위에 게임을 포함시키�
 ### AR Session과 AR Session Origin
 
 기기의 각종 데이터(카메라, 자이로 등)를 통해 현실의 환경을 가져온다.  
-유니티 월드상에서 AR Session은 가져온 현실 상황, AR Session Origin은 그 Session상에서 기기(카메라)의 위치와 회전 정보를 의미한다.  
-(ARFoundation 4.x까지는 AR Session Origin, ARFoundation 5.x에서는 XR Origin)
+유니티 월드상에서 `AR Session`은 가져온 현실 상황, `AR Session Origin`은 그 Session상에서 기기(카메라)의 위치와 회전 정보를 의미한다.  
+(ARFoundation 4.x까지는 `AR Session Origin`, ARFoundation 5.x에서는 `XR Origin`)
 
-### AR 시스템(AR Core)이 인식한 현실을 게임에서 사용하기
+## AR 시스템(AR Core)이 인식한 현실을 게임에서 사용하기
 
-AR Core는 기기의 입력장치들로부터 현실의 지점들과 평면들을 인식하고, 유니티에선 이 정보를 게임에 사용한다. AR Core가 방의 벽과 바닥을 인식하면, 게임에서 가상의 공을 던져서 그 벽에 충돌하도록 할 수 있는 것이다.
+AR Core는 기기의 입력장치들로부터 현실의 지점들로부터 평면, 특정 이미지, 얼굴 등을 인식하고, 유니티에선 이 정보를 게임에 사용한다. AR Core가 방의 벽과 바닥을 인식하면, 게임에서 가상의 공을 던져서 그 벽에 충돌하도록 할 수 있는 것이다.
 
+### 평면 감지
+
+* AR Plane Manager 컴포넌트: 특징점을 토대로 바닥, 벽, 책상 등의 평면을 찾아낸다.
+  * Plane Prefab: 감지한 평면에 생성할 프리팹. 하이어라키 창에서 우클릭-`XR`-`AR Default Plane`을 선택해서 `AR Plane` 컴포넌트를 갖는 기본 프리팹을 생성할 수 있다.
 * AR Raycast: 인식한 평면이 인식된 영역의 연장선상까지 뻗어있는 것으로 가정하고 Raycast를 하는 방식으로 평면 인식의 한계를 커버한다.
+
+### 이미지 트래킹
+
+카메라 화면에서 특정 이미지를 찾아서 그 위치를 유니티 월드 위치로 사용할 수 있게 한다. (예시: AR카드 굿즈)
+
+* AR Tracked Image Manager 컴포넌트: 추적할 이미지를 정해서 그 위치에 지정한 프리팹을 생성한다.
+  * Tracked Image Prefab: 이미지 위에 생성할 게임 오브젝트. null로 비워두거나 `Tracked Image` 컴포넌트를 포함한 프리팹을 넣어서 스크립트로 관리할 수 있다.
+  * trackedImagesChanged 액션: 이미지가 감지, 갱신, 해제될 때에 트리거되는 델리게이트.
+* Reference Image Library 애셋: 추적할 이미지 목록
+
+### 페이스 트래킹
+
+카메라 화면에서 사람의 얼굴을 찾아서 유니티 월드상의 Mesh로 사용할 수 있게 한다.
+
+* AR Face Manager 컴포넌트:
+  * Face Prefab: 얼굴 Mesh에 사용할 Material 등을 포함시켜 생성할 게임 오브젝트. 하이어라키 창에서 우클릭-`XR`-`AR Default Face`를 선택해서 `AR Face` 컴포넌트를 갖는 기본 프리팹을 생성할 수 있다.
+
+## 오클루전 컬링
+
+가상의 물체가 실제 물체에 가려지는 것 처럼 보이도록 그리는 것. AR Plane Manager에 SpatialMapping/Occlusion을 Matarial로 하는 Prefab을 설정하는 것으로 감지된 평면으로 가리는 방식으로 저렴하게 대체하기도 한다.
+
+* AR Occulsion Manager: AR Foundation에 구현되어있는 오클루전 컬링. 품질이 뛰어나지만 현시점에선 상당한 비용이 소비되고 경계면이 깔끔해 보이지 않는다.
+
+## 디바이스 센서 사용하기
+
+AR은 디바이스를 들고 이동하면서 플레이하는 상황이 많다보니 GPS와 같은 디바이스 센서를 효과적으로 활용하기 좋다.
+[모바일에서 센서 사용하기](./모바일%20개발(Android).md/#디바이스-센서-사용하기)
