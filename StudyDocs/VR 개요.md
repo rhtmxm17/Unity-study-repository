@@ -40,3 +40,15 @@ XR Interaction Toolkit에 포함된, VR 기기를 사용하기 어려운 상황�
 ## VR에서의 UI
 
 VR 환경에서 기존과 같이 카메라 오버레이로 UI를 출력하면 눈 바로 앞에 UI가 위치하고, 월드상에 존재하는 컨트롤러로 선택하기 곤란해진다. 따라서 UI를 월드상에 배치하고 컨트롤러로 가리켜서 사용하는 방식을 사용한다.
+
+1. EventSystem에 XR UI Input Modul 추가
+1. Canvas에 Tracked device Graphic Raycaster 추가
+
+## 핸드 트래킹(XR Hands)
+
+[매뉴얼](https://docs.unity3d.com/Packages/com.unity.xr.hands@1.4/manual/index.html)  
+VR 디바이스에서 패스스루 카메라 등을 이용해 사용자의 손 동작을 인식하는 기능이다. 컨트롤러를 필요로 하지 않는 입력으로 사용할 수 있다.
+
+* Hand Shape 애셋: 손으로 취할 수 있는 각종 제스처를 의미한다.
+* XR Hand Tracking Event 컴포넌트: 지속적으로 손 동작을 방향, 구부러진 정도 값의 형태로 감지한다.
+* Static Hand Geasture 컴포넌트: 담당한 Hand Shape가 취해졌는지, 해제되었는지에 따라 이벤트를 발생시킨다.
