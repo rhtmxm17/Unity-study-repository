@@ -6,3 +6,6 @@
 
 # VS code
 */.vscode/
+
+# ParrelSync로 복제된 프로젝트(한자릿수 한정)
+/*_clone_[0-9]/
