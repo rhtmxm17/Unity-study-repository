@@ -10,20 +10,20 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 
     public void PlayerJoined(PlayerRef player)
     {
-        Debug.Log($"ÇÃ·¹ÀÌ¾î{player.PlayerId} Á¢¼Ó");
+        Debug.Log($"í”Œë ˆì´ì–´{player.PlayerId} ì ‘ì†");
 
-        // ÇØ´ç ÇÃ·¹ÀÌ¾îÀÇ Å¬¶óÀÌ¾ğÆ®¿¡¼­¸¸ »ı¼ºÀ» È£ÃâÇÏµµ·Ï Á¦ÇÑÇÑ´Ù
-        // ÀÌ·¯ÇÑ ¿¹¿Ü Ã³¸®°¡ ´©¶ôµÉ °æ¿ì,
-        // ¾Æ·¡ ³»¿ëÀÌ ¸ğµç ÇÃ·¹ÀÌ¾îÀÇ Å¬¶óÀÌ¾ğÆ®¿¡¼­ °¢°¢ ½ÇÇàµÇ¾î
-        // ½Å±Ô ÇÃ·¹ÀÌ¾îÀÇ Ä³¸¯ÅÍ°¡ Âü¿©ÁßÀÎ ÇÃ·¹ÀÌ¾î ¼ö ¸¸Å­ »ı¼ºµÈ´Ù
+        // í•´ë‹¹ í”Œë ˆì´ì–´ì˜ í´ë¼ì´ì–¸íŠ¸ì—ì„œë§Œ ìƒì„±ì„ í˜¸ì¶œí•˜ë„ë¡ ì œí•œí•œë‹¤
+        // ì´ëŸ¬í•œ ì˜ˆì™¸ ì²˜ë¦¬ê°€ ëˆ„ë½ë  ê²½ìš°,
+        // ì•„ë˜ ë‚´ìš©ì´ ëª¨ë“  í”Œë ˆì´ì–´ì˜ í´ë¼ì´ì–¸íŠ¸ì—ì„œ ê°ê° ì‹¤í–‰ë˜ì–´
+        // ì‹ ê·œ í”Œë ˆì´ì–´ì˜ ìºë¦­í„°ê°€ ì°¸ì—¬ì¤‘ì¸ í”Œë ˆì´ì–´ ìˆ˜ ë§Œí¼ ìƒì„±ëœë‹¤
         if (player != Runner.LocalPlayer)
             return;
         
-        // ³×Æ®¿öÅ© »ó¿¡¼­ °øÀ¯µÇ´Â ¹°Ã¼´Â Runner.Spawn()À¸·Î »ı¼º
-        // ¹«ÀÛÀ§ À§Ä¡¿¡ »ı¼ºÇØµµ ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡¼­ µ¿ÀÏÇÑ À§Ä¡¿¡ ³ªÅ¸³­´Ù
+        // ë„¤íŠ¸ì›Œí¬ ìƒì—ì„œ ê³µìœ ë˜ëŠ” ë¬¼ì²´ëŠ” Runner.Spawn()ìœ¼ë¡œ ìƒì„±
+        // ë¬´ì‘ìœ„ ìœ„ì¹˜ì— ìƒì„±í•´ë„ ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì—ì„œ ë™ì¼í•œ ìœ„ì¹˜ì— ë‚˜íƒ€ë‚œë‹¤
         Runner.Spawn(playerPrefab, new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5f, 5f)));
 
-        // ÇØ´ç Å¬¶óÀÌ¾ğÆ®¿¡ ÇÑÁ¤µÈ ¹°Ã¼´Â ±âÁ¸ÀÇ Instantiate()·Î »ı¼º
+        // í•´ë‹¹ í´ë¼ì´ì–¸íŠ¸ì— í•œì •ëœ ë¬¼ì²´ëŠ” ê¸°ì¡´ì˜ Instantiate()ë¡œ ìƒì„±
         if (playerUI != null )
             Instantiate(playerUI);
 
@@ -31,7 +31,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
 
     public void PlayerLeft(PlayerRef player)
     {
-        Debug.Log($"ÇÃ·¹ÀÌ¾î{player.PlayerId} Á¢¼Ó ÇØÁ¦");
+        Debug.Log($"í”Œë ˆì´ì–´{player.PlayerId} ì ‘ì† í•´ì œ");
 
     }
 }

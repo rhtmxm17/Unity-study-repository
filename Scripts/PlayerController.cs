@@ -29,25 +29,25 @@ public class PlayerController : NetworkBehaviour
         jumpInput = playerInput.actions["Jump"];
         jumpInput.started += OnJumpInput;
 
-        zeroVelocityJumpTime = jumpSpeed / -Physics.gravity.y;
+        zeroVelocityJumpTime = jumpSpeed / Physics.gravity.y;
     }
 
 
-    //// ì‚¬ìš©ì ì…ë ¥ì„ ì²˜ë¦¬í•˜ëŠ” ì»´í¬ë„ŒíŠ¸ë¥¼ ëª…í™•íˆ ë¶„ë¦¬í•œë‹¤ë©´ ì•„ì˜ˆ ì œê±°/ë¹„í™œì„±í™”í•˜ëŠ” ê²ƒë„ ìœ íš¨
+    //// »ç¿ëÀÚ ÀÔ·ÂÀ» Ã³¸®ÇÏ´Â ÄÄÆ÷³ÍÆ®¸¦ ¸íÈ®È÷ ºĞ¸®ÇÑ´Ù¸é ¾Æ¿¹ Á¦°Å/ºñÈ°¼ºÈ­ÇÏ´Â °Íµµ À¯È¿
     //private void Start()
     //{
     //    if (!HasStateAuthority)
     //    {
-    //        Debug.Log("ì†Œìœ ê¶Œì´ ì—†ëŠ” ì»¨íŠ¸ë¡¤ íŒŒê´´");
+    //        Debug.Log("¼ÒÀ¯±ÇÀÌ ¾ø´Â ÄÁÆ®·Ñ ÆÄ±«");
     //        Destroy(this);
     //    }
     //}
 
-    // í•´ë‹¹ í´ë¼ì´ì–¸íŠ¸ì—ì„œë§Œ ì ìš©ë˜ëŠ” Update ì£¼ê¸°
+    // ÇØ´ç Å¬¶óÀÌ¾ğÆ®¿¡¼­¸¸ Àû¿ëµÇ´Â Update ÁÖ±â
     private void Update()
     {
-        //// ì†Œìœ ê¶Œì´ ì—†ëŠ” NetworkBehaviourì˜ Updateë„ í˜¸ì¶œë¨. ìœ ì˜
-        //Debug.Log($"Update ì†Œìœ ê¶Œ: {HasStateAuthority}");
+        //// ¼ÒÀ¯±ÇÀÌ ¾ø´Â NetworkBehaviourÀÇ Updateµµ È£ÃâµÊ. À¯ÀÇ
+        //Debug.Log($"Update ¼ÒÀ¯±Ç: {HasStateAuthority}");
 
         if (! HasStateAuthority)
             return;
@@ -57,37 +57,27 @@ public class PlayerController : NetworkBehaviour
         inputVector.z = input.y;
     }
 
-    private void OnDrawGizmos()
-    {
-        // isGrounded ì²´í¬ Gizmo
-        Gizmos.DrawRay(transform.position + Vector3.up * 0.1f, Vector3.down * 0.2f);
-    }
-
     private void OnJumpInput(InputAction.CallbackContext _)
     {
         if (false == isGrounded)
             return;
 
         isGrounded = false;
-        FallBeginTime = Runner.SimulationTime + zeroVelocityJumpTime; // ë‚™í•˜ ì†ë„ê°€ 0ì´ ë˜ëŠ” ì‹œê°„ì„ ì €ì¥
+        FallBeginTime = Runner.SimulationTime + zeroVelocityJumpTime; // ³«ÇÏ ¼Óµµ°¡ 0ÀÌ µÇ´Â ½Ã°£À» ÀúÀå
     }
 
-    // ë„¤íŠ¸ì›Œí¬ í†µì‹  ì£¼ê¸°ë§ˆë‹¤ Network Objectì— ì˜í•´ í˜¸ì¶œë¨
-    // ë„¤íŠ¸ì›Œí¬ ì‚¬ì´í´ ìƒì—ì„œ Updateì²˜ëŸ¼ ë™ì‘
+    // ³×Æ®¿öÅ© Åë½Å ÁÖ±â¸¶´Ù Network Object¿¡ ÀÇÇØ È£ÃâµÊ
+    // ³×Æ®¿öÅ© »çÀÌÅ¬ »ó¿¡¼­ UpdateÃ³·³ µ¿ÀÛ
     public override void FixedUpdateNetwork()
     {
-        //// í•­ìƒ true ì¶œë ¥ë¨. ì†Œìœ ê¶Œì„ ê°–ëŠ” ê°ì²´ì˜ FixedUpdateNetworkë§Œ í˜¸ì¶œë˜ëŠ”ë“¯?
-        //Debug.Log($"FixedUpdateNetwork ì†Œìœ ê¶Œ: {HasStateAuthority}");
+        //// Ç×»ó true Ãâ·ÂµÊ. ¼ÒÀ¯±ÇÀ» °®´Â °´Ã¼ÀÇ FixedUpdateNetwork¸¸ È£ÃâµÇ´Âµí?
+        //Debug.Log($"FixedUpdateNetwork ¼ÒÀ¯±Ç: {HasStateAuthority}");
 
-        // ê·¸ë˜ë„ ë§¤ë‰´ì–¼ì—ì„œ ì˜ˆì™¸ì²˜ë¦¬ë¥¼ í•˜ê³ ìˆìœ¼ë‹ˆ ë”°ë¥´ëŠ”ê²Œ ì¢‹ì„ ê²ƒ ê°™ë‹¤
+        // ±×·¡µµ ¸Å´º¾ó¿¡¼­ ¿¹¿ÜÃ³¸®¸¦ ÇÏ°íÀÖÀ¸´Ï µû¸£´Â°Ô ÁÁÀ» °Í °°´Ù
         if (! HasStateAuthority)
             return;
 
         Debug.Log($"isGrounded: {isGrounded} | SimulationTime: {Runner.SimulationTime} |FallBeginTime: {FallBeginTime}");
-        
-        // ì í”„ ë˜ëŠ” ë‚™í•˜ ì‹œê°„ìœ¼ë¡œë¶€í„° yì¶• ì†ë„ë¥¼ ê³„ì‚°í•˜ëŠ” ë°©ì‹ì„ ì‚¬ìš©í•´ë³´ì•˜ë‹¤
-        // ì˜ˆìƒ ì¥ì : ì²œì¥ì— ë§‰í˜€ë„ ìƒìŠ¹ ì‹œê°„ì€ ë³´ì¥ë˜ëŠ” ì¡°ì‘ê°(í”Œë«í¬ë¨¸ì—ì„œ ìì£¼ ë³´ëŠ”)
-        // ì˜ˆìƒ ë‹¨ì : ê³µì¤‘ì—ì„œ ë‹¤ë¥¸ ìš”ì†Œë¡œ ì¸í•´ ì†ë„ê°€ ë³€í•˜ëŠ” ìƒí™©ì˜ ì²˜ë¦¬ê°€ ë³µì¡í•´ì§
 
         if (isGrounded)
         {
@@ -95,7 +85,7 @@ public class PlayerController : NetworkBehaviour
             isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
             if (false == isGrounded)
             {
-                FallBeginTime = Runner.SimulationTime; // ë‚™í•˜ ì†ë„ê°€ 0ì´ ë˜ëŠ” ì‹œê°„ == í˜„ì¬
+                FallBeginTime = Runner.SimulationTime; // ³«ÇÏ ¼Óµµ°¡ 0ÀÌ µÇ´Â ½Ã°£ == ÇöÀç
             }
         }
         else
@@ -104,7 +94,7 @@ public class PlayerController : NetworkBehaviour
             velocity.y = Physics.gravity.y * (Runner.SimulationTime - FallBeginTime);
             controller.Move(Runner.DeltaTime * velocity);
 
-            // ì í”„ ì‹œì‘ì‹œ isGroundedê°€ ë˜ë©´ ì•ˆë˜ë¯€ë¡œ ë‚™í•˜ì¤‘ì¼ ê²½ìš°ì—ë§Œ isGrounded ê²€ì‚¬
+            // Á¡ÇÁ ½ÃÀÛ½Ã isGrounded°¡ µÇ¸é ¾ÈµÇ¹Ç·Î ³«ÇÏÁßÀÏ °æ¿ì¿¡¸¸ isGrounded °Ë»ç
             if (velocity.y <= 0f)
             {
                 isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
@@ -112,18 +102,18 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    // ë„¤íŠ¸ì›Œí¬ ì˜¤ë¸Œì íŠ¸ ìƒì„±ì‹œ í˜¸ì¶œë¨
+    // ³×Æ®¿öÅ© ¿ÀºêÁ§Æ® »ı¼º½Ã È£ÃâµÊ
     public override void Spawned()
     {
-        // ì†Œìœ ê¶Œì´ ì—†ëŠ” NetworkBehaviourì˜ Spawnedë„ í˜¸ì¶œë¨
-        Debug.Log($"Spawned ì†Œìœ ê¶Œ: {HasStateAuthority}");
+        // ¼ÒÀ¯±ÇÀÌ ¾ø´Â NetworkBehaviourÀÇ Spawnedµµ È£ÃâµÊ
+        Debug.Log($"Spawned ¼ÒÀ¯±Ç: {HasStateAuthority}");
 
-        // ë‚´ í´ë¼ì´ì–¸íŠ¸ì— ë‹¤ë¥¸ ì‚¬ëŒì˜ ìºë¦­í„°ê°€ ë‚˜íƒ€ë‚¬ì„ ë•Œì—ë„ í•´ì•¼ í•  ì²˜ë¦¬
+        // ³» Å¬¶óÀÌ¾ğÆ®¿¡ ´Ù¸¥ »ç¶÷ÀÇ Ä³¸¯ÅÍ°¡ ³ªÅ¸³µÀ» ¶§¿¡µµ ÇØ¾ß ÇÒ Ã³¸®
 
         if (! HasStateAuthority)
             return;
 
-        // ë‚´ ìºë¦­í„°ì— ëŒ€í•´ì„œë§Œ í•´ì•¼ í•  ì²˜ë¦¬(ì˜ˆ: ì¹´ë©”ë¼ ì¶”ì  ëŒ€ìƒ ì„¤ì •)
+        // ³» Ä³¸¯ÅÍ¿¡ ´ëÇØ¼­¸¸ ÇØ¾ß ÇÒ Ã³¸®(¿¹: Ä«¸Ş¶ó ÃßÀû ´ë»ó ¼³Á¤)
         if (Camera.main.TryGetComponent(out CameraController camControl))
         {
             camControl.Target = this.transform;
