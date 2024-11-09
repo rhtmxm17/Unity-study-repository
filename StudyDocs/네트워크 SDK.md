@@ -25,3 +25,14 @@ SDK는 [유니티 AssetStore](https://assetstore.unity.com/packages/tools/networ
 
 * IPlayerJoined, IPlayerLeft 등의 인터페이스:
   레이어 접속, 종료 등 특정 상황이 발생했을 경우 Network Runner가 같은 GameObject가 갖는 해당 인터페이스를 호출한다
+
+### Network Object의 소유권
+
+Network Object는 생성한 클라이언트가 소유권을 갖거나 따로 소유권을 지정해줄 수 있다. 소유권을 갖는 클라이언트에서만 Network Object가 관리하는 정보를 수정할 수 있다.  
+또한 클라이언트의 접속이 종료될 경유 소유중인 Network Object가 파괴된다.
+
+NetworkBehaviour라면 HasStateAuthority 필드로 소유권을 확인할 수 있다.
+
+### Network에서의 Time
+
+NetworkBehaviour의 FixedUpdateNetwork() 시간 간격을 사용할 때는 Time.deltaTime 대신 Runner.DeltaTime을 사용한다.
