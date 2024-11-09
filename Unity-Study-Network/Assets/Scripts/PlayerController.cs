@@ -14,7 +14,7 @@ public class PlayerController : NetworkBehaviour
     private InputAction moveInput;
     private InputAction jumpInput;
 
-    private Vector3 inputVector;
+    private Vector3 moveVector;
 
     private float zeroVelocityJumpTime;
     private float FallBeginTime;
@@ -52,9 +52,17 @@ public class PlayerController : NetworkBehaviour
         if (! HasStateAuthority)
             return;
 
+        Vector3 moveAxisX = Camera.main.transform.right;
+        Vector3 moveAxisY = Camera.main.transform.forward;
+
+        moveAxisX.y = 0f;
+        moveAxisY.y = 0f;
+
+        moveAxisX.Normalize();
+        moveAxisY.Normalize();
+
         Vector2 input = moveInput.ReadValue<Vector2>();
-        inputVector.x = input.x;
-        inputVector.z = input.y;
+        moveVector = input.x * moveAxisX + input.y * moveAxisY;
     }
 
     private void OnDrawGizmos()
@@ -83,15 +91,18 @@ public class PlayerController : NetworkBehaviour
         if (! HasStateAuthority)
             return;
 
-        Debug.Log($"isGrounded: {isGrounded} | SimulationTime: {Runner.SimulationTime} |FallBeginTime: {FallBeginTime}");
-        
+        Debug.Log($"isGrounded: {isGrounded} | SimulationTime: {Runner.SimulationTime} | SimulationDeltaTime: {Runner.DeltaTime} | FallBeginTime: {FallBeginTime}");
+
         // 점프 또는 낙하 시간으로부터 y축 속도를 계산하는 방식을 사용해보았다
-        // 예상 장점: 천장에 막혀도 상승 시간은 보장되는 조작감(플랫포머에서 자주 보는)
+        // 예상 특징: 천장에 막혀도 상승 시간은 보장되는 조작감(플랫포머에서 자주 보는)
         // 예상 단점: 공중에서 다른 요소로 인해 속도가 변하는 상황의 처리가 복잡해짐
+
+        if (moveVector != Vector3.zero)
+            transform.forward = moveVector;
 
         if (isGrounded)
         {
-            controller.Move(Runner.DeltaTime * moveSpeed * inputVector);
+            controller.Move(Runner.DeltaTime * moveSpeed * moveVector);
             isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
             if (false == isGrounded)
             {
@@ -100,7 +111,7 @@ public class PlayerController : NetworkBehaviour
         }
         else
         {
-            Vector3 velocity = moveSpeed * inputVector;
+            Vector3 velocity = moveSpeed * moveVector;
             velocity.y = Physics.gravity.y * (Runner.SimulationTime - FallBeginTime);
             controller.Move(Runner.DeltaTime * velocity);
 
