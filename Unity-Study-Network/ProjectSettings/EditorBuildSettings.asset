@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Photon Study.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/Network FPS.unity
+    guid: fdf1b513c6d38024bbc8cde46d4feb16
   m_configObjects: {}

@@ -8,12 +8,12 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - FPS View
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Unit
+  - Physics Effect
+  - Character Controller
   - 
   - 
   - 

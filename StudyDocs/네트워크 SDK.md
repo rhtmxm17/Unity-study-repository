@@ -1,8 +1,8 @@
 # 네트워크 SDK
 
-## Photon
+## Photon Fusion
 
-[기술 문서](https://doc.photonengine.com/)  
+[기술 문서](https://doc.photonengine.com/fusion/)  
 클라우드 상에 서버 앱을 생성하고 접속이 가능하다
 
 ### 프로젝트 설정
@@ -21,10 +21,16 @@ SDK는 [유니티 AssetStore](https://assetstore.unity.com/packages/tools/networ
 * Network Object 컴포넌트: 네트워크 상에서 공유될 정보를 포함한다는 것을 지정
 * Network Transform 컴포넌트: 네트워크 상에서 Transform을 공유하는 기능
 
-* SimulationBehaviour 클래스: 네트워크 기능을 추가로 구현하기 위한 베이스 클래스. Behaviour를 상속하고 있다.
+* SimulationBehaviour 클래스: 네트워크 기능을 추가로 구현하기 위한 베이스 클래스. Behaviour를 상속하고 있다. (NetworkBehaviour가 주로 사용)
 
 * IPlayerJoined, IPlayerLeft 등의 인터페이스:
   레이어 접속, 종료 등 특정 상황이 발생했을 경우 Network Runner가 같은 GameObject가 갖는 해당 인터페이스를 호출한다
+
+* Networked 어트리뷰트: [API Reference](https://doc-api.photonengine.com/en/fusion/v2/class_fusion_1_1_networked_attribute.html)  
+  네트워크 상에서 동기화 되어야 하는 프로퍼티
+* OnChangedRender 어트리뷰트:  
+  Networked로 지정된 프로퍼티의 값이 변경되었을 때 호출될 메서드를 지정한다.  
+  set에서 이벤트를 트리거해도 다른 클라이언트에서 값을 변경할 경우 호출되지 않기 때문에 필요하다.
 
 ### Network Object의 소유권
 
@@ -32,6 +38,11 @@ Network Object는 생성한 클라이언트가 소유권을 갖거나 따로 소
 또한 클라이언트의 접속이 종료될 경유 소유중인 Network Object가 파괴된다.
 
 NetworkBehaviour라면 HasStateAuthority 필드로 소유권을 확인할 수 있다.
+
+### RPC(원격 프로시저 호출)
+
+내가 상대 캐릭터를 공격하는 상황을 가정하자. 공격 판정은 스스로 수행해도 문제가 없지만 이후 데미지 처리는 소유권을 갖는 상대 클라이언트에서 처리해야 한다.  
+메서드에 `[RPC(호출 가능 클라이언트, 호출 대상 클라이언트)]` 어트리뷰트를 지정해 사용한다.
 
 ### Network에서의 Time
 
