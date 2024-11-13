@@ -47,3 +47,17 @@ NetworkBehaviour라면 HasStateAuthority 필드로 소유권을 확인할 수 �
 ### Network에서의 Time
 
 NetworkBehaviour의 FixedUpdateNetwork() 시간 간격을 사용할 때는 Time.deltaTime 대신 Runner.DeltaTime을 사용한다.
+
+## Photon PUN
+
+Photon에서 Fusion 이전에 개발된 유니티 네트워크 SDK  
+Fusion에 비해 오래된 버전이기 때문에 기능과 성능이 떨어질 수 있으나 검증된 버전이며 여러 곳에서 사용되고있다.
+
+### 요청 + 반응 컨셉
+
+PhotonNetwork 클래스를 사용해 클라이언트가 서버에게 요청을 보내고, MonobehaviourPunCallbacks 클래스의 콜백을 재정의해 서버의 반응을 받는 구조로 이루어져있다.
+
+### 커스텀 프로퍼티
+
+방 또는 플레이어에 추가로 **동기화 가능한** 정보를 부여하는 방법. `ExitGames.Client.Photon.HashTable`을 사용해 프로퍼티 이름과 값을 페어로 할당해 Dictionary처럼 사용한다.  
+프로퍼티를 부여 또는 변경할 때에는 SetCustomProperties()를 사용해야 동기화된다.  
