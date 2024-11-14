@@ -15,6 +15,11 @@ public class LevelScene : MonoBehaviourPunCallbacks
         gameOverButton.onClick.AddListener(GameOver);
         returnLobbyButton.onClick.AddListener(ReturnLobby);
         UpdateMasterClient();
+
+        if (PhotonNetwork.InRoom)
+        {
+            OnJoinScene();
+        }
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -57,6 +62,31 @@ public class LevelScene : MonoBehaviourPunCallbacks
 
     public void ReturnLobby()
     {
-        PhotonNetwork.LoadLevel("LobbyScene");
+        PhotonNetwork.LeaveRoom();
+
+        //// 방으로 잠시 돌아갔다 다시 진행중인 게임 참여는 조금 더 복잡한 처리가 필요한듯
+        //PhotonNetwork.LoadLevel("LobbyScene");
     }
+
+    public void OnJoinScene()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            ReadySceneMaster();
+        }
+
+        ReadyPlayer();
+    }
+
+    private void ReadySceneMaster()
+    {
+        //// 포톤뷰 객체를 RoomObject로 생성
+        //PhotonNetwork.InstantiateRoomObject("Monster", new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5f, 5f)), Quaternion.identity);
+    }
+
+    private void ReadyPlayer()
+    {
+        PhotonNetwork.Instantiate("PlayerCharacter", new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5f, 5f)), Quaternion.identity);
+    }
+
 }

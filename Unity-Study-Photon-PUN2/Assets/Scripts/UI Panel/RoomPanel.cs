@@ -27,6 +27,12 @@ public class RoomPanel : MonoBehaviour
             return;
         }
 
+        // 방 로비 진입시 레디 상태 해제(방 재진입이나 게임 씬 종료시 필요)
+        PhotonNetwork.LocalPlayer.SetReady(false);
+
+        // 방장의 씬과 동기화
+        PhotonNetwork.AutomaticallySyncScene = true;
+
         PlayerNumbering.OnPlayerNumberingChanged += UpdatePlayerEntries;
         PlayerNumbering.OnPlayerNumberingChanged += () => { Debug.Log("OnPlayerNumberingChanged"); };
     }
@@ -91,14 +97,13 @@ public class RoomPanel : MonoBehaviour
 
     public void StartGame()
     {
-        if (false == PhotonNetwork.LocalPlayer.IsMasterClient)
+        if (false == PhotonNetwork.IsMasterClient)
         {
             Debug.LogWarning("잘못된 접근입니다");
             return;
         }
 
-        PhotonNetwork.AutomaticallySyncScene = true;
-        PhotonNetwork.LoadLevel("NetworkLoadlevelTest");
+        PhotonNetwork.LoadLevel("LevelScene");
 
         // 게임 진행 도중 참여가 불가능한 게임이라면
         PhotonNetwork.CurrentRoom.IsOpen = false;

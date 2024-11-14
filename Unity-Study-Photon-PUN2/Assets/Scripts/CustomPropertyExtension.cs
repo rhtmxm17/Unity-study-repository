@@ -10,21 +10,42 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 /// </summary>
 public static class CustomPropertyExtension
 {
-    private const string PlayerReady = "Rd";
-    private const bool DefaultPlayerReady = false;
-    private static PhotonHashtable playerReadyHashTable = new PhotonHashtable() { { PlayerReady, DefaultPlayerReady } };
-
-    public static void SetReady(this Player player, bool value)
+    private class CustomPlayerProperty<T> where T : struct
     {
-        playerReadyHashTable[PlayerReady] = value;
-        player.SetCustomProperties(playerReadyHashTable); // SetCustomProperties를 통해 변경해야 동기화 된다
+        public CustomPlayerProperty(string key, T defaultvValue)
+        {
+            this.Key = key;
+            this.defaultValue = defaultvValue;
+            this.table = new PhotonHashtable() { { key, defaultvValue } };
+        }
+
+        private string Key;
+        private T defaultValue;
+        private PhotonHashtable table;
+
+        public void Set(Player player, T value)
+        {
+            table[Key] = value;
+            player.SetCustomProperties(table);
+        }
+
+        public T Get(Player player)
+        {
+            if (player.CustomProperties.TryGetValue(Key, out object value))
+                return (T)value;
+            else
+                return defaultValue;
+        }
     }
 
-    public static bool GetReady(this Player player)
-    {
-        if (player.CustomProperties.TryGetValue(PlayerReady, out object value))
-            return (bool)value;
-        else
-            return DefaultPlayerReady;
-    }
+    private static CustomPlayerProperty<bool> ready = new CustomPlayerProperty<bool>("Rd", false);
+    private static CustomPlayerProperty<bool> load = new CustomPlayerProperty<bool>("ld", false);
+
+    public static void SetReady(this Player player, bool value) => ready.Set(player, value);
+    public static bool GetReady(this Player player) => ready.Get(player);
+
+    public static void SetLoad(this Player player, bool value) => load.Set(player, value);
+    public static bool GetLoad(this Player player) => load.Get(player);
 }
+
+

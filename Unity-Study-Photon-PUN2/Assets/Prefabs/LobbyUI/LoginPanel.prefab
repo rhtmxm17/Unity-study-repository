@@ -222,7 +222,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Login
+  m_text: "\uB85C\uADF8\uC778"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: afba894ed3e4e3c4390587ab363e5029, type: 2}
   m_sharedMaterial: {fileID: -5789405967951087027, guid: afba894ed3e4e3c4390587ab363e5029, type: 2}
