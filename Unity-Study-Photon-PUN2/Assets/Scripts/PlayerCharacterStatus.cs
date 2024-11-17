@@ -31,4 +31,5 @@ public class PlayerCharacterStatus : MonoBehaviour, IPunObservable
         //stream.Serialize(ref hp);
         //stream.Serialize(ref alive);
     }
+
 }

@@ -86,7 +86,7 @@ public class LevelScene : MonoBehaviourPunCallbacks
 
     private void ReadyPlayer()
     {
-        PhotonNetwork.Instantiate("PlayerCharacter", new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5f, 5f)), Quaternion.identity);
+        PhotonNetwork.Instantiate("PlayerCharacter", new Vector3(Random.Range(-5f, 5f), 1f, Random.Range(-5f, 5f)), Quaternion.identity);
     }
 
 }
