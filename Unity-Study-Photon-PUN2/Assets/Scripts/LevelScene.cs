@@ -37,6 +37,56 @@ public class LevelScene : MonoBehaviourPunCallbacks
         UpdateMasterClient();
     }
 
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        foreach (DictionaryEntry pair in changedProps)
+        {
+            switch ((string)pair.Key)
+            {
+                case CustomPropertyExtension.CharacterVidKey:
+                    UpdatePersonalSettings(targetPlayer, (int)pair.Value);
+                    break;
+                case CustomPropertyExtension.PersonalColorIndexKey:
+                    UpdatePersonalColor(targetPlayer, (int)pair.Value);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void UpdatePersonalSettings(Player targetPlayer, int viewId)
+    {
+        PhotonView playerCharacter = PhotonNetwork.GetPhotonView(viewId);
+        if (playerCharacter == null)
+            return;
+
+        if (false == playerCharacter.TryGetComponent(out CharacterPersonalSetting setting))
+            return;
+
+        int colorIndex = targetPlayer.GetPersonalColor();
+        if (colorIndex >= 0)
+        {
+            setting.SetColor(colorIndex);
+        }
+    }
+
+    private void UpdatePersonalColor(Player targetPlayer, int colorIndex)
+    {
+        int characterVid = targetPlayer.GetCharacterVid();
+        if (characterVid > 0) // 기술문서에 의하면 view ID 0은 '정의되지 않음'을 의미
+        {
+            PhotonView playerCharacter = PhotonNetwork.GetPhotonView(characterVid);
+            if (playerCharacter == null)
+                return;
+
+            if (false == playerCharacter.TryGetComponent(out CharacterPersonalSetting setting))
+                return;
+
+            setting.SetColor(colorIndex);
+        }
+    }
+
     private void UpdateMasterClient()
     {
         if (PhotonNetwork.IsMasterClient)

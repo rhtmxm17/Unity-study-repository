@@ -4,11 +4,19 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerCharacterStatus : MonoBehaviour, IPunObservable
+public class PlayerCharacterStatus : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] int level;
     [SerializeField] float hp;
     [SerializeField] bool alive;
+
+    private void Start()
+    {
+        if (photonView.IsMine)
+        {
+            PhotonNetwork.LocalPlayer.SetCharacterVid(photonView.ViewID);
+        }
+    }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

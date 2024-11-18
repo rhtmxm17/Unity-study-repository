@@ -14,38 +14,51 @@ public static class CustomPropertyExtension
     {
         public CustomPlayerProperty(string key, T defaultvValue)
         {
-            this.Key = key;
+            this.key = key;
             this.defaultValue = defaultvValue;
             this.table = new PhotonHashtable() { { key, defaultvValue } };
         }
 
-        private string Key;
-        private T defaultValue;
-        private PhotonHashtable table;
+        private readonly string key;
+        private readonly T defaultValue;
+        private readonly PhotonHashtable table;
 
         public void Set(Player player, T value)
         {
-            table[Key] = value;
+            table[key] = value;
             player.SetCustomProperties(table);
         }
 
         public T Get(Player player)
         {
-            if (player.CustomProperties.TryGetValue(Key, out object value))
+            if (player.CustomProperties.TryGetValue(key, out object value))
                 return (T)value;
             else
                 return defaultValue;
         }
     }
 
-    private static CustomPlayerProperty<bool> ready = new CustomPlayerProperty<bool>("Rd", false);
-    private static CustomPlayerProperty<bool> load = new CustomPlayerProperty<bool>("ld", false);
+    public const string ReadyKey = "Rd";
+    public const string LoadKey = "ld";
+    public const string CharacterVidKey = "Cv";
+    public const string PersonalColorIndexKey = "Pci";
+
+    private static readonly CustomPlayerProperty<bool> ready = new CustomPlayerProperty<bool>(ReadyKey, false);
+    private static readonly CustomPlayerProperty<bool> load = new CustomPlayerProperty<bool>(LoadKey, false);
+    private static readonly CustomPlayerProperty<int> characterVid = new CustomPlayerProperty<int>(CharacterVidKey, 0);
+    private static readonly CustomPlayerProperty<int> personalColorIndex = new CustomPlayerProperty<int>(PersonalColorIndexKey, -1);
 
     public static void SetReady(this Player player, bool value) => ready.Set(player, value);
     public static bool GetReady(this Player player) => ready.Get(player);
 
     public static void SetLoad(this Player player, bool value) => load.Set(player, value);
     public static bool GetLoad(this Player player) => load.Get(player);
+
+    public static void SetCharacterVid(this Player player, int value) => characterVid.Set(player, value);
+    public static int GetCharacterVid(this Player player) => characterVid.Get(player);
+
+    public static void SetPersonalColor(this Player player, int value) => personalColorIndex.Set(player, value);
+    public static int GetPersonalColor(this Player player) => personalColorIndex.Get(player);
 }
 
 

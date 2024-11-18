@@ -28,7 +28,14 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Shooter.CallOnHit(this, other.attachedRigidbody?.gameObject ?? other.gameObject);
+        if (other.attachedRigidbody != null)
+        {
+            Shooter.CallOnHit(this, other.attachedRigidbody.gameObject);
+        }
+        else
+        {
+            Shooter.CallOnHit(this, other.gameObject);
+        }
     }
 
     /// <summary>
@@ -41,7 +48,7 @@ public class Projectile : MonoBehaviour
     {
         hitPossibility--;
 
-        if (target.IsMine && target.TryGetComponent(out IDamageable damageable))
+        if (target != null && target.IsMine && target.TryGetComponent(out IDamageable damageable))
         {
             damageable.Damaged(Damage);
         }

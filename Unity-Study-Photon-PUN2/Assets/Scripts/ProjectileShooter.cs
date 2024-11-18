@@ -6,21 +6,22 @@ using UnityEngine;
 public class ProjectileShooter : MonoBehaviourPun
 {
     [SerializeField] Projectile projectilePrefab;
+    [SerializeField] Transform muzzlePose;
 
-    private Projectile[] projectiles = new Projectile[16];
+    private readonly Projectile[] projectiles = new Projectile[16];
 
     /*
     ViewID 제한: https://doc.photonengine.com/pun/current/gameplay/instantiation#viewid-limits
     보통 플레이어당 PhotonView는 수 개면 충분하고, 총알 등을 모두 PhotonView로 네트워크 인스턴스 하는것은 비효율적이라 한다.
      */
-    public void Fire(Vector3 fireposition, Vector3 velocity)
+    public void Fire(float velocity)
     {
         for (int i = 0; i < projectiles.Length; i++)
         {
             if (projectiles[i] != null)
                 continue;
 
-            photonView.RPC(nameof(FireRPC), RpcTarget.All, i, fireposition, velocity);
+            photonView.RPC(nameof(FireRPC), RpcTarget.All, i, muzzlePose.position, muzzlePose.forward * velocity);
             return;
         }
 
@@ -33,11 +34,14 @@ public class ProjectileShooter : MonoBehaviourPun
         Projectile instance = Instantiate(projectilePrefab, fireposition, Quaternion.LookRotation(velocity));
         projectiles[projectileId] = instance;
         instance.Id = projectileId;
+        instance.Shooter = this;
         instance.SetVelocity(velocity);
 
         // 지연보상
         float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
-        instance.GetComponent<Rigidbody>().MovePosition(velocity * lag);
+        instance.GetComponent<Rigidbody>().MovePosition(fireposition + velocity * lag);
+
+        Destroy(instance, 3f - lag);
     }
 
     /*
@@ -49,8 +53,9 @@ public class ProjectileShooter : MonoBehaviourPun
      */
     public void CallOnHit(Projectile source, GameObject target)
     {
+        Debug.Log($"적중 대상: {target.name}");
         bool found = target.TryGetComponent(out PhotonView targetView);
-        int targetId = (targetView?.ViewID) ?? 0;
+        int targetId = (targetView != null ? targetView.ViewID : 0);
 
         photonView.RPC(nameof(OnHitRPC), RpcTarget.AllViaServer, source.Id, found, targetId);
     }
@@ -63,6 +68,7 @@ public class ProjectileShooter : MonoBehaviourPun
             return;
 
         PhotonView target = targetIsPhotonView ? PhotonView.Find(targetID) : null;
+        Debug.Log($"RPC에서 확인된 적중 대상: {targetIsPhotonView} / {targetID}");
 
         bool isAlive = source.OnHitGetAlive(target);
 

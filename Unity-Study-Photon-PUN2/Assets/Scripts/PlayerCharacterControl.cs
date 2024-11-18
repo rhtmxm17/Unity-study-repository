@@ -10,6 +10,7 @@ public class PlayerCharacterControl : MonoBehaviourPun
     [SerializeField] float speed;
 
     private CharacterMovement movement;
+    private ProjectileShooter shooter;
 
     private InputAction moveInput;
     private InputAction fireInput;
@@ -17,16 +18,17 @@ public class PlayerCharacterControl : MonoBehaviourPun
     private void Awake()
     {
         movement = GetComponent<CharacterMovement>();
-    }
+        shooter = GetComponent<ProjectileShooter>();
 
-    private void Start()
-    {
         // 1클라이언트 1플레이어 전제
         PlayerInput input = PlayerInput.GetPlayerByIndex(0);
 
         moveInput = input.actions["Move"];
         fireInput = input.actions["Fire"];
+    }
 
+    private void Start()
+    {
         Camera.main.GetComponent<CameraController>().Target = this.transform;
     }
 
@@ -36,6 +38,17 @@ public class PlayerCharacterControl : MonoBehaviourPun
         {
             this.enabled = false;
         }
+        fireInput.started += WhenFireInput;
+    }
+
+    private void OnDisable()
+    {
+        fireInput.started -= WhenFireInput;
+    }
+
+    private void WhenFireInput(InputAction.CallbackContext _)
+    {
+        shooter.Fire(8f);
     }
 
     private void Update()
