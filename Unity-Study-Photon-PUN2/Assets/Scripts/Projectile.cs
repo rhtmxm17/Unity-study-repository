@@ -6,6 +6,15 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
 {
+    [SerializeField] Renderer colorSetRenderer;
+
+    public Color PersonalColor
+    { 
+        set
+        {
+            colorSetRenderer.material.color = value;
+        }
+    }
     public float Damage { get; set; } = 10f;
     public int Id { get; set; }
     public ProjectileShooter Shooter { get; set; }

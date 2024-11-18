@@ -8,7 +8,19 @@ public class ProjectileShooter : MonoBehaviourPun
     [SerializeField] Projectile projectilePrefab;
     [SerializeField] Transform muzzlePose;
 
+    private Projectile projectileProto; // 원본 프리팹에 개인 설정(색상)을 추가한 프로토타입
     private readonly Projectile[] projectiles = new Projectile[16];
+
+    private void Awake()
+    {
+        projectileProto = Instantiate(projectilePrefab);
+        projectileProto.gameObject.SetActive(false);
+    }
+
+    public void SetColor(Color color)
+    {
+        projectileProto.PersonalColor = color;
+    }
 
     /*
     ViewID 제한: https://doc.photonengine.com/pun/current/gameplay/instantiation#viewid-limits
@@ -31,7 +43,8 @@ public class ProjectileShooter : MonoBehaviourPun
     [PunRPC]
     private void FireRPC(int projectileId, Vector3 fireposition, Vector3 velocity, PhotonMessageInfo info)
     {
-        Projectile instance = Instantiate(projectilePrefab, fireposition, Quaternion.LookRotation(velocity));
+        Projectile instance = Instantiate(projectileProto, fireposition, Quaternion.LookRotation(velocity));
+        instance.gameObject.SetActive(true);
         projectiles[projectileId] = instance;
         instance.Id = projectileId;
         instance.Shooter = this;
@@ -41,7 +54,7 @@ public class ProjectileShooter : MonoBehaviourPun
         float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
         instance.GetComponent<Rigidbody>().MovePosition(fireposition + velocity * lag);
 
-        Destroy(instance, 3f - lag);
+        Destroy(instance.gameObject, 3f - lag);
     }
 
     /*
@@ -55,7 +68,16 @@ public class ProjectileShooter : MonoBehaviourPun
     {
         Debug.Log($"적중 대상: {target.name}");
         bool found = target.TryGetComponent(out PhotonView targetView);
-        int targetId = (targetView != null ? targetView.ViewID : 0);
+        int targetId = 0;
+        if (targetView != null)
+        {
+            if (false == targetView.IsMine)
+            {
+                Debug.Log("소유권이 없는 대상의 피격 판정 무시");
+                return;
+            }
+            targetId = targetView.ViewID;
+        }
 
         photonView.RPC(nameof(OnHitRPC), RpcTarget.AllViaServer, source.Id, found, targetId);
     }

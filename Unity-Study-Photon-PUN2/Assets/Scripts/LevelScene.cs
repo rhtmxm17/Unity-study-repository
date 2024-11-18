@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Realtime;
 using UnityEngine.UI;
+using Photon.Pun.UtilityScripts;
 
 public class LevelScene : MonoBehaviourPunCallbacks
 {
@@ -37,20 +38,32 @@ public class LevelScene : MonoBehaviourPunCallbacks
         UpdateMasterClient();
     }
 
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        int viewId = newPlayer.GetCharacterVid();
+        if (viewId == 0)
+            return;
+
+        UpdatePersonalSettings(newPlayer, viewId);
+    }
+
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         foreach (DictionaryEntry pair in changedProps)
         {
-            switch ((string)pair.Key)
+            if (pair.Key is string key)
             {
-                case CustomPropertyExtension.CharacterVidKey:
-                    UpdatePersonalSettings(targetPlayer, (int)pair.Value);
-                    break;
-                case CustomPropertyExtension.PersonalColorIndexKey:
-                    UpdatePersonalColor(targetPlayer, (int)pair.Value);
-                    break;
-                default:
-                    break;
+                switch (key)
+                {
+                    case CustomPropertyExtension.CharacterVidKey:
+                        UpdatePersonalSettings(targetPlayer, (int)pair.Value);
+                        break;
+                    case CustomPropertyExtension.PersonalColorIndexKey:
+                        UpdatePersonalColor(targetPlayer, (int)pair.Value);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -125,7 +138,7 @@ public class LevelScene : MonoBehaviourPunCallbacks
             ReadySceneMaster();
         }
 
-        ReadyPlayer();
+        ReadyPlayers();
     }
 
     private void ReadySceneMaster()
@@ -134,9 +147,21 @@ public class LevelScene : MonoBehaviourPunCallbacks
         //PhotonNetwork.InstantiateRoomObject("Monster", new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5f, 5f)), Quaternion.identity);
     }
 
-    private void ReadyPlayer()
+    private void ReadyPlayers()
     {
         PhotonNetwork.Instantiate("PlayerCharacter", new Vector3(Random.Range(-5f, 5f), 1f, Random.Range(-5f, 5f)), Quaternion.identity);
+        int playerNum = PhotonNetwork.LocalPlayer.GetPlayerNumber();
+        if (0 > playerNum)
+        {
+            int randNum = Random.Range(0, 6);
+            Debug.Log($"무작위 번호({randNum})로 색상 설정됨");
+            PhotonNetwork.LocalPlayer.SetPersonalColor(randNum);
+        }
+        else
+        {
+            Debug.Log($"플레이어 번호({playerNum})로 색상 설정됨");
+            PhotonNetwork.LocalPlayer.SetPersonalColor(playerNum);
+        }
     }
 
 }

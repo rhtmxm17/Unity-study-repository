@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorTable: {fileID: 11400000, guid: 8ae824a33fe4aed4ea2ed2dc19997a8a, type: 2}
-  personalColorRenderer: {fileID: 8813637589293108397}
+  personalColorRenderer: {fileID: 1885861635252144803}
   targetMaterial: 0
 --- !u!1 &4991325958844293823
 GameObject:
@@ -301,13 +301,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66ae442726d1cf4428dacb34edd61ac4, type: 3}
+--- !u!23 &1885861635252144803 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2604282136720742071, guid: 66ae442726d1cf4428dacb34edd61ac4, type: 3}
+  m_PrefabInstance: {fileID: 4471979752904678420}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7703326822052875970 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6118174221721670358, guid: 66ae442726d1cf4428dacb34edd61ac4, type: 3}
-  m_PrefabInstance: {fileID: 4471979752904678420}
-  m_PrefabAsset: {fileID: 0}
---- !u!137 &8813637589293108397 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 4926935057241198777, guid: 66ae442726d1cf4428dacb34edd61ac4, type: 3}
   m_PrefabInstance: {fileID: 4471979752904678420}
   m_PrefabAsset: {fileID: 0}

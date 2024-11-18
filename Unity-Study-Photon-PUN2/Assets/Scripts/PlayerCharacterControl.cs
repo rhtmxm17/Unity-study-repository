@@ -37,6 +37,7 @@ public class PlayerCharacterControl : MonoBehaviourPun
         if (false == photonView.IsMine)
         {
             this.enabled = false;
+            return;
         }
         fireInput.started += WhenFireInput;
     }
