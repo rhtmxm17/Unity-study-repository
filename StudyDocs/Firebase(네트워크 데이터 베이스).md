@@ -26,3 +26,7 @@ Authentication은 이러한 사용자 계정 인증을 위한 기능을 제공�
 #### ContinueWithOnMainThread
 
 System의 ContinueWith은 메인 스레드와는 다른 스레드에서 델리게이트가 실행되기 때문에, 델리게이트 내에서 메인 스레드와 같은 메모리를 수정하는 등 동기화 오류의 위험이 매우 크다. Firebase.Extensions 네임스페이스의 ContinueWithOnMainThread는 해당 델리게이트를 메인스레드에서 수행하게 해준다.
+
+## Firebase Realtime Database
+
+NoSQL, JSON 기반 네트워크 데이터페이스

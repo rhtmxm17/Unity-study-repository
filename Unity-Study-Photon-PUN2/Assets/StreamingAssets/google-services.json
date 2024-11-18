@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1047820032230",
+    "firebase_url": "https://fir-study-2a36d-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "fir-study-2a36d",
+    "storage_bucket": "fir-study-2a36d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1047820032230:android:0fa33e82c71ce58ab04327",
+        "android_client_info": {
+          "package_name": "com.cjs_study.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmYYxfF7AOn9jDc2_RdjhUCJDI-TYwizc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
