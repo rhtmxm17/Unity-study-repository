@@ -70,3 +70,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# 현재 프로젝트에서 공개가 필요한 StreamingAsset이 없음
+/[Aa]ssets/[Ss]treamingAssets/
