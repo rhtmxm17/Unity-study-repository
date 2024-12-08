@@ -30,3 +30,25 @@ System의 ContinueWith은 메인 스레드와는 다른 스레드에서 델리�
 ## Firebase Realtime Database
 
 NoSQL, JSON 기반 네트워크 데이터페이스
+
+### 데이터 구조화
+
+Realtime Database는 직렬화된 클래스와 유사한 형태의 JSON 트리를 통해 데이터를 접근/편집할 수 있다.
+
+```C#
+DatabaseReference root = FirebaseDatabase.DefaultInstance.RootReference;
+root.Child("users").Child(userId).Child("username").SetValueAsync(name);
+```
+
+위의 코드는 `"users"` 아래의 `userId` 아래의 `"username"`의 값을 `name`으로 설정한다.  
+
+#### 주의사항: 비동기
+
+[데이터를 트랜잭션으로 저장](https://firebase.google.com/docs/database/unity/save-data#save_data_as_transactions)
+함수 명의 `Async`에서도 드러나듯 네트워크상의 데이터를 사용하는 것이기 때문에 비동기 방식으로 진행된다. 이때 값을 변경하는 경우 변경한 값을 대입하는 방식을 사용하면 동시에 발생한 변경사항중 하나가 덮어씌워지는 상황이 발생하기 쉽다.  
+따라서 `RunTransaction()`을 사용해 `새로운 값(예: 10 -> 15)`이 아닌 `값에 대한 변경 내용(예: +5)`을 전달하는 방식으로 안정적으로 작동시킬 수 있다.
+
+### 보안 규칙
+
+[Firebase 실시간 데이터베이스 보안 규칙 이해](https://firebase.google.com/docs/database/security)  
+데이터베이스의 각 항목마다 읽기`.read`, 쓰기`.write`, 유효성`.validate` 규칙을 설정 가능하며 추가로 정렬 기준`.indexOn`을 미리 지정해 자주 사용하는 정렬에 대한 색인을 생성할 수도 있다.

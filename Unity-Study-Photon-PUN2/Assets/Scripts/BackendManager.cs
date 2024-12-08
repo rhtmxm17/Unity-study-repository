@@ -12,10 +12,16 @@ public class BackendManager : MonoBehaviour
     private static FirebaseAuth auth;
     private static FirebaseDatabase database;
 
+    private static DatabaseReference userDataRef;
+    private static DatabaseReference currentUserDataRef;
+
     public static FirebaseAuth Auth => auth;
     public static FirebaseDatabase Database => database;
 
-    private void Start()
+    public static DatabaseReference UserDataRef => userDataRef;
+    public static DatabaseReference CurrentUserDataRef => currentUserDataRef;
+
+    private void Awake()
     {
         CheckFirebaseDependencies();
     }
@@ -35,6 +41,9 @@ public class BackendManager : MonoBehaviour
 
                 // Set a flag here to indicate whether Firebase is ready to use by your app.
                 Debug.Log("FirebaseApp 종속성 검사 완료");
+
+                userDataRef = database.RootReference.Child($"Users");
+                auth.IdTokenChanged += Auth_IdTokenChanged;
             }
             else
             {
@@ -43,7 +52,21 @@ public class BackendManager : MonoBehaviour
                 app = null;
                 auth = null;
                 database = null;
+
+                userDataRef = null;
             }
         });
+    }
+
+    private void Auth_IdTokenChanged(object sender, System.EventArgs args)
+    {
+        if (auth.CurrentUser == null)
+        {
+            currentUserDataRef = null;
+        }
+        else
+        {
+            currentUserDataRef = database.RootReference.Child($"Users/{auth.CurrentUser.UserId}");
+        }
     }
 }
